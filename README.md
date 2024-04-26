@@ -95,7 +95,7 @@ There are four properties you can set for the logo:
 - `logoPadding`: The padding around the logo in pixels. The default is 4 pixels
 - `logoSize`: The size of the logo as a percentage of the QR code's width. The default is 15% of the QR code size
 
-**Note:** It is recommended that the QR Code error correction level be set to M or higher to ensure the QR code remains functional with the logo
+**Note:** It is recommended that the QR Code error correction level be set to M or higher to ensure the QR code remains readable with the logo
 
 **Tested with:** .svg, .png, .jpeg, .gif & .webp
 
