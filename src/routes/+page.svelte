@@ -77,7 +77,7 @@
 
 <h2>With logo</h2>
 <div>
-	<QRCode content="https://duxreserve.com" logoPath="logo/lightning.svg" />
+	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" />
 </div>
 
 <div>
@@ -85,38 +85,38 @@
 </div>
 
 <div>
-	<QRCode content="https://duxreserve.com" logoPath="logo/lightning.svg" logoBackgroundColor="#009900" logoPadding={10} />
+	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoPadding={10} />
 </div>
 
 <div>
-	<QRCode content="https://duxreserve.com" logoPath="logo/lightning.svg" logoBackgroundColor="#009900" logoWidth={20} />
+	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoWidth={20} />
 </div>
 
 <div>
-	<QRCode content="https://duxreserve.com" logoPath="logo/lightning.svg" logoBackgroundColor="transparent" logoWidth={20} />
+	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="transparent" logoWidth={20} />
 </div>
 
 <div>
-	<QRCode content="https://duxreserve.com" logoPath="logo/lightning.png" />
+	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.png" />
 </div>
 
 <div>
-	<QRCode content="https://duxreserve.com" logoPath="logo/lightning.jpeg" />
+	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.jpeg" />
 </div>
 
 <div>
-	<QRCode content="https://duxreserve.com" logoPath="logo/lightning.webp" />
+	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.webp" />
 </div>
 
 <div>
-	<QRCode content="https://duxreserve.com" logoPath="logo/lightning.gif" />
+	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.gif" />
 </div>
 
 <h2>With download link generated</h2>
 <div>
 	<QRCode
 		content="https://duxreserve.com"
-		logoPath="logo/lightning.svg"
+		logoPath="/logo/lightning.svg"
 		dispatchDownloadLink
 		on:downloadLinkGenerated={(data) => handleDownloadLinkGenerated(data.detail.url)}
 	/>

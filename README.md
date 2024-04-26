@@ -100,13 +100,13 @@ There are four properties you can set for the logo:
 **Tested with:** .svg, .png, .jpeg, .gif & .webp
 
 ```svelte
-<QRCode content="https://duxreserve.com" logoPath="logo/lightning.svg" />
+<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" />
 
 <QRCode content="https://duxreserve.com" logoPath="logo/lightning.svg" logoBackgroundColor="#009900" />
 
-<QRCode content="https://duxreserve.com" logoPath="logo/lightning.svg" logoBackgroundColor="#009900" logoPadding={10} />
+<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoPadding={10} />
 
-<QRCode content="https://duxreserve.com" logoPath="logo/lightning.svg" logoBackgroundColor="#009900" logoWidth={20} />
+<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoWidth={20} />
 ```
 
 ![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample4.svg?sanitize=true)
@@ -133,7 +133,7 @@ Additionally, include the `target="_blank"` attribute in the anchor tag to open 
 <div>
   <QRCode
     content="https://duxreserve.com"
-    logoPath="logo/lightning.svg"
+    logoPath="/logo/lightning.svg"
     dispatchDownloadLink
     on:downloadLinkGenerated={(data) => handleDownloadLinkGenerated(data.detail.url)}
   />
