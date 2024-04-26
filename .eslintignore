@@ -2,9 +2,7 @@
 .env
 .env.*
 /.svelte-kit
-/.vite
-/build
-/package
+/dist
 node_modules
 
 # Specific file(s) to ignore
@@ -19,10 +17,8 @@ vite.config.ts
 # Ignore local backup
 *.backup.*
 
-# Ignore files for PNPM, NPM and YARN
-pnpm-lock.yaml
+# Ignore files for NPM
 package-lock.json
-yarn.lock
 
 # ! Exception
 !.env.example

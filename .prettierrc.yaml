@@ -3,6 +3,7 @@ plugins:
 
 arrowParens: always
 bracketSpacing: true
+endOfLine: auto
 jsxSingleQuote: true
 printWidth: 160
 semi: true
@@ -11,4 +12,3 @@ svelteSortOrder: options-scripts-markup-styles
 tabWidth: 2
 trailingComma: all
 useTabs: true
-endOfLine: auto

@@ -1,24 +1,25 @@
 module.exports = {
 	root: true,
 	env: {
+		browser: true,
+		es2024: true,
 		node: true,
 	},
 	parser: '@typescript-eslint/parser',
-	plugins: ['prettier', 'html', 'import', 'only-warn', 'no-loops', '@typescript-eslint'],
+	plugins: ['@typescript-eslint', 'html', 'import', 'no-loops', 'only-warn', 'prettier'],
 	extends: [
-		'plugin:svelte/recommended',
 		'plugin:@typescript-eslint/recommended',
 		'plugin:@typescript-eslint/recommended-requiring-type-checking',
-		'plugin:import/recommended',
 		'plugin:import/typescript',
 		'plugin:security/recommended',
+		'plugin:svelte/recommended',
 	],
 	parserOptions: {
-		ecmaVersion: 2022,
+		ecmaVersion: 'latest',
+		extraFileExtensions: ['.svelte'],
+		project: './tsconfig.json',
 		sourceType: 'module',
 		tsconfigRootDir: __dirname,
-		project: ['./tsconfig.json'],
-		extraFileExtensions: ['.svelte'],
 	},
 	overrides: [
 		{
@@ -30,6 +31,7 @@ module.exports = {
 			},
 		},
 	],
+	ignorePatterns: ['./.svelte-kit', './dist', './static', '*.cjs', 'node_modules'],
 	rules: {
 		indent: [
 			2,
