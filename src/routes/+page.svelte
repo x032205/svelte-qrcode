@@ -2,9 +2,14 @@
 	import { QRCode } from '$lib/index';
 
 	let downloadUrl = '';
+	let downloadUrlDirectBase64 = '';
 
 	const handleDownloadLinkGenerated = (url = '') => {
 		downloadUrl = url;
+	};
+
+	const handleDownloadLinkGeneratedForDirectBase64 = (url = '') => {
+		downloadUrlDirectBase64 = url;
 	};
 </script>
 
@@ -112,6 +117,24 @@
 	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.gif" />
 </div>
 
+<p>Direct base64 encoded image</p>
+<div>
+	<QRCode
+		content="https://duxreserve.com"
+		base64Image="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Im0xOC40OTYgMTAuNzA5bC04LjYzNiA4Ljg4Yy0uMjQuMjQ2LS42MzgtLjAzOS0uNDgyLS4zNDVsMy4wNzQtNi4wNjZhLjMuMyAwIDAgMC0uMjY4LS40MzZINS43MThhLjMuMyAwIDAgMS0uMjE0LS41MWw4LjAxLTguMTE1Yy4yMzItLjIzNS42MTguMDIzLjQ4OS4zMjhMMTEuNzA2IDkuODZhLjMuMyAwIDAgMCAuMjguNDE3bDYuMjkxLS4wNzhhLjMuMyAwIDAgMSAuMjIuNTA5Ii8+PC9zdmc+"
+		logoBackgroundColor="#eeff00"
+	/>
+</div>
+
+<p>External URL</p>
+<div>
+	<QRCode
+		content="https://duxreserve.com"
+		logoPath="https://upload.wikimedia.org/wikipedia/commons/a/a8/Lightning_bolt_simple.png"
+		logoBackgroundColor="#009900"
+	/>
+</div>
+
 <p>Incorrect path (no logo)</p>
 <div>
 	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning/image.png" />
@@ -129,6 +152,21 @@
 
 {#if downloadUrl}
 	<a href={downloadUrl} download="QR-code-filename" target="_blank">Download QR Code</a>
+{/if}
+
+<p>Direct base64 encoded image</p>
+<div>
+	<QRCode
+		content="https://duxreserve.com"
+		base64Image="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Im0xOC40OTYgMTAuNzA5bC04LjYzNiA4Ljg4Yy0uMjQuMjQ2LS42MzgtLjAzOS0uNDgyLS4zNDVsMy4wNzQtNi4wNjZhLjMuMyAwIDAgMC0uMjY4LS40MzZINS43MThhLjMuMyAwIDAgMS0uMjE0LS41MWw4LjAxLTguMTE1Yy4yMzItLjIzNS42MTguMDIzLjQ4OS4zMjhMMTEuNzA2IDkuODZhLjMuMyAwIDAgMCAuMjguNDE3bDYuMjkxLS4wNzhhLjMuMyAwIDAgMSAuMjIuNTA5Ii8+PC9zdmc+"
+		logoBackgroundColor="#eeff00"
+		dispatchDownloadLink
+		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedForDirectBase64(data.detail.url)}
+	/>
+</div>
+
+{#if downloadUrl}
+	<a href={downloadUrlDirectBase64} download="QR-code-filename-direct-base64" target="_blank">Download QR Code</a>
 {/if}
 
 <h2>Time based one time passwords configuration sample</h2>

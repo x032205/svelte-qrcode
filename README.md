@@ -90,12 +90,14 @@ You can add a logo to the center of the QR code; it will be automatically scaled
 
 There are four properties you can set for the logo:
 
-- `logoPath`: The path to the logo image, which can be either a local path or a URL. Typically, the logo file is located in the static folder. If the path is incorrect or undefined (`''`), the logo will not be displayed
-- `logoBackgroundColor`: Background color of the logo (in hexadecimal color or "transparent"). If it's an empty string (`''`), the background will default to the QR code's `backgroundColor` property
-- `logoPadding`: The padding around the logo in pixels. The default is 4 pixels
-- `logoSize`: The size of the logo as a percentage of the QR code's size. The default is 15% of the QR code size
+- `base64Image`: base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times. There is no validation of the base64 encoding; ensure it is valid
 
-**Note:** It is recommended that the QR Code error correction level be set to M or higher to ensure the QR code remains readable with the logo.
+- `logoPath`: The path to the logo image can be either a local path or a URL. Typically, the logo file is located in the static folder. If the path is incorrect or undefined, the logo will not be displayed. It uses the Fetch API to load the image; therefore, if the URL is external, it must be CORS-enabled. Note that there may be a slight delay in loading the image
+- `logoBackgroundColor`: Background color of the logo (in hexadecimal color or "transparent"). If it's an empty string (`''`) or undefined, the background will default to the QR code's `backgroundColor` property
+- `logoPadding`: The padding around the logo in pixels. The default value is 4 pixels
+- `logoSize`: The size of the logo as a percentage of the QR code's size. The default value is 15% of the QR code size
+
+**Note:** It is recommended that the QR Code error correction level (`errorCorrection`) be set to `M` or higher to ensure the QR code remains readable with the logo.
 
 **Tested with:** .svg, .png, .jpeg, .gif & .webp. May work with other formats as well.
 
@@ -107,6 +109,22 @@ There are four properties you can set for the logo:
 <QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoPadding={10} />
 
 <QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoWidth={20} />
+
+<!-- External URL -->
+
+<QRCode
+  content="https://duxreserve.com"
+  logoPath="https://upload.wikimedia.org/wikipedia/commons/a/a8/Lightning_bolt_simple.png"
+  logoBackgroundColor="#009900"
+/>
+
+<!-- Direct base64 encoded image -->
+
+<QRCode
+  content="https://duxreserve.com"
+  base64Image="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Im0xOC40OTYgMTAuNzA5bC04LjYzNiA4Ljg4Yy0uMjQuMjQ2LS42MzgtLjAzOS0uNDgyLS4zNDVsMy4wNzQtNi4wNjZhLjMuMyAwIDAgMC0uMjY4LS40MzZINS43MThhLjMuMyAwIDAgMS0uMjE0LS41MWw4LjAxLTguMTE1Yy4yMzItLjIzNS42MTguMDIzLjQ4OS4zMjhMMTEuNzA2IDkuODZhLjMuMyAwIDAgMCAuMjguNDE3bDYuMjkxLS4wNzhhLjMuMyAwIDAgMSAuMjIuNTA5Ii8+PC9zdmc+"
+  logoBackgroundColor="#eeff00"
+/>
 ```
 
 ![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample4.svg?sanitize=true)
@@ -115,7 +133,7 @@ There are four properties you can set for the logo:
 
 You can download the QR code as an SVG file by using an anchor tag that initiates the download. To enable this functionality, set the `dispatchDownloadLink` property to `true` and listen for the `downloadLinkGenerated` event to retrieve the download URL.
 
-You should also add the `download` attribute to the anchor tag to specify the filename for the downloaded file.
+Add the `download` attribute to the anchor tag to specify the filename for the downloaded file.
 
 Additionally, include the `target="_blank"` attribute in the anchor tag to open the download in a new tab.
 
