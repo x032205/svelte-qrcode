@@ -112,6 +112,11 @@
 	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.gif" />
 </div>
 
+<p>Incorrect path (no logo)</p>
+<div>
+	<QRCode content="https://duxreserve.com" logoPath="/logo/lightning/image.png" />
+</div>
+
 <h2>With download link generated</h2>
 <div>
 	<QRCode
