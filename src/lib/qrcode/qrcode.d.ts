@@ -13,8 +13,8 @@ declare class QRCode extends SvelteComponent {
 		padding?: number; // Padding around the QR code in pixels
 		size?: number; // Size of the QR code in pixels
 
-		logoPath?: string; // If left empty, no logo will be added. Otherwise, the logo will be centered on the QR code. Typically, the logo file is located in the static folder
-		logoBackgroundColor?: string; // Hexadecimal background color of the logo. If empty, the background will be the same as the QR code background color
+		logoPath?: string; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. Typically, the logo file is located in the static folder
+		logoBackgroundColor?: string; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
 		logoPadding?: number; // Padding around the logo in pixels
 		logoWidth?: number; // Size of the logo in percentage relative to the QR code width
 

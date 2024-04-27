@@ -14,8 +14,8 @@
 	export let padding = 4; // Padding around the QR code in pixels
 	export let size = 150; // Size of the QR code in pixels
 
-	export let logoPath = ''; // If left empty, no logo will be added. Otherwise, the logo will be centered on the QR code. Typically, the logo file is located in the static folder
-	export let logoBackgroundColor = ''; // Hexadecimal background color of the logo. If empty, the background will be the same as the QR code background color
+	export let logoPath = ''; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. Typically, the logo file is located in the static folder
+	export let logoBackgroundColor = ''; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
 	export let logoPadding = 4; // Padding around the logo in pixels
 	export let logoWidth = 15; // Size of the logo in percentage relative to the QR code width
 
@@ -99,7 +99,7 @@
 @param backgroundColor (string) The background color of the QR Code in hexadecimal format or 'transparent'. Default is '#ffffff'
 @param color (string) The color of the QR Code in hexadecimal format. Default is '#000000'
 @param errorCorrection (string) The error correction level of the QR Code. Possible values: 'L', 'M', 'Q', 'H'. Default is 'M'
-@param isResponsive (boolean) With the responsive settings enabled, the size settings will only be used in the code calculation,
+@param isResponsive (boolean) With the responsive settings enabled, the size settings will only be used in the code calculation
 and the container will adapt and use all available space in its parent element. Default is true
 @param padding (number) Padding around the QR Code. Default is 4 pixels
 @param size (number) The size of the QR Code in pixels. Default is 150 pixels
@@ -108,7 +108,7 @@ and the container will adapt and use all available space in its parent element. 
 
 @param logoPath (string) The path to the logo file to be added to the center of the QR Code. Default is '' (no logo).
 With the logo, it is recommended to have a minimum error correction level of 'M' to ensure the QR Code is readable
-@param logoBackgroundColor (string) The background color of the logo in hexadecimal format. Default is '' (same as the QR Code background color)
+@param logoBackgroundColor (string) The background color of the logo in hexadecimal format or 'transparent'. Default is '' (same as the QR Code backgroundColor property)
 @param logoPadding (number) Padding around the logo in pixels. Default is 4 pixels
 @param logoWidth (number) The size of the logo in percentage relative to the QR Code width. Default is 15%
 

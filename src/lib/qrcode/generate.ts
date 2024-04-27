@@ -50,8 +50,8 @@ interface Options {
 	height: number; // Size of the QR code in pixels
 	join: boolean;
 	typeNumber: number;
-	base64Image?: string; // If left empty, no logo will be added. Otherwise, the logo will be centered on the QR code. Logo from logoPath converted to base64 by the svelte qr code component
-	logoBackgroundColor?: string; // Hexadecimal background color of the logo. If empty, the background will be the same as the QR code background color
+	base64Image?: string; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. Logo from logoPath converted to base64 by the svelte qr code component
+	logoBackgroundColor?: string; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
 	logoPadding?: number; // Padding around the logo in pixels
 	logoWidth?: number; // Size of the logo in percentage relative to the QR code width
 }
