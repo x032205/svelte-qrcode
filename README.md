@@ -90,7 +90,7 @@ You can add a logo to the center of the QR code; it will be automatically scaled
 
 There are four properties you can set for the logo:
 
-- `logoPath`: The path to the logo image, which can be either a local path or a URL. Typically, the logo file is located in the static folder
+- `logoPath`: The path to the logo image, which can be either a local path or a URL. Typically, the logo file is located in the static folder. If the path is incorrect or undefined (`''`), the logo will not be displayed
 - `logoBackgroundColor`: Background color of the logo (in hexadecimal color or "transparent"). If it's an empty string (`''`), the background will default to the QR code's `backgroundColor` property
 - `logoPadding`: The padding around the logo in pixels. The default is 4 pixels
 - `logoSize`: The size of the logo as a percentage of the QR code's size. The default is 15% of the QR code size
