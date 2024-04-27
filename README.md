@@ -88,11 +88,10 @@ To select error correction level, various factors such as the operating environm
 
 You can add a logo to the center of the QR code; it will be automatically scaled to fit and inserted in the generated SVG image.
 
-There are four properties you can set for the logo:
-
 - `base64Image`: base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times. There is no validation of the base64 encoding; ensure it is valid
 
 - `logoPath`: The path to the logo image can be either a local path or a URL. Typically, the logo file is located in the static folder. If the path is incorrect or undefined, the logo will not be displayed. It uses the Fetch API to load the image; therefore, if the URL is external, it must be CORS-enabled. Note that there may be a slight delay in loading the image
+
 - `logoBackgroundColor`: Background color of the logo (in hexadecimal color or "transparent"). If it's an empty string (`''`) or undefined, the background will default to the QR code's `backgroundColor` property
 - `logoPadding`: The padding around the logo in pixels. The default value is 4 pixels
 - `logoSize`: The size of the logo as a percentage of the QR code's size. The default value is 15% of the QR code size
