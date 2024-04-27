@@ -18,7 +18,7 @@
  * @editor Alexandre Castlenine
  *
  * - Code formated
- * - Translated to TypeScript
+ * - Converted to TypeScript
  * - Replaced prototypes with class
  * - Code still has no dependencies
  *

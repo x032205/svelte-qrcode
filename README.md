@@ -96,7 +96,7 @@ You can add a logo to the center of the QR code; it will be automatically scaled
 - `logoPadding`: The padding around the logo in pixels. The default value is 4 pixels
 - `logoSize`: The size of the logo as a percentage of the QR code's size. The default value is 15% of the QR code size
 
-**Note:** It is recommended that the QR Code error correction level (`errorCorrection`) be set to `M` or higher to ensure the QR code remains readable with the logo.
+**Note:** It is recommended to set the QR Code error correction level (`errorCorrection`) to `M` or higher to ensure the QR code remains readable with the logo. Make sure the `logoPadding` or `logoSize` are not too large. Verify the result by scanning the QR code.
 
 **Tested with:** .svg, .png, .jpeg, .gif & .webp. May work with other formats as well.
 
