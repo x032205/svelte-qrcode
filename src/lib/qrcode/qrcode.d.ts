@@ -6,10 +6,53 @@ declare class QRCode extends SvelteComponent {
 	$$prop_def: {
 		data: string; // Data of the QR code
 
+		typeNumber?:
+			| 0 // Automatic type number
+			| 1
+			| 2
+			| 3
+			| 4
+			| 5
+			| 6
+			| 7
+			| 8
+			| 9
+			| 10
+			| 11
+			| 12
+			| 13
+			| 14
+			| 15
+			| 16
+			| 17
+			| 18
+			| 19
+			| 20
+			| 21
+			| 22
+			| 23
+			| 24
+			| 25
+			| 26
+			| 27
+			| 28
+			| 29
+			| 30
+			| 31
+			| 32
+			| 33
+			| 34
+			| 35
+			| 36
+			| 37
+			| 38
+			| 39
+			| 40; // Type number (1 ~ 40), or 0 for auto detection
+
 		backgroundColor?: string; // Hexadecimal color code or 'transparent'
 		color?: string; // Hexadecimal color code
-		anchorColor: string; // Color of anchors
-		moduleColor: string; // Color for regular modules
+		anchorColor?: string; // Color of anchors
+		moduleColor?: string; // Color for regular modules
 
 		errorCorrectionLevel?: 'L' | 'M' | 'Q' | 'H'; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
 

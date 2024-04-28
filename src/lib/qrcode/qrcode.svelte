@@ -7,6 +7,8 @@
 
 	export let data = ''; // Data of the QR code
 
+	export let typeNumber = 0; // Type number (1 ~ 40), or 0 for auto detection
+
 	export let backgroundColor = '#ffffff'; // Hexadecimal color code or 'transparent', can be color css name (TOCHECK)
 	export let color = '#000000'; // Hexadecimal color code
 	export let anchorColor = color; // Hexadecimal color code
@@ -36,7 +38,7 @@
 
 	const OPTIONS: Options = {
 		data,
-		typeNumber: 4,
+		typeNumber,
 		backgroundColor,
 		anchorColor,
 		moduleColor,
@@ -157,6 +159,10 @@
 ### QR Code
 
 @param data (string) Data to encode in QR code
+
+&nbsp;
+
+@param typeNumber (number) Type number (1 ~ 40), or 0 for auto detection. Default is 0
 
 &nbsp;
 

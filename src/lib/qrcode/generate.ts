@@ -50,7 +50,7 @@ interface Options {
 	width: number; // Width dimension in pixels of the QR code
 	height: number; // Height dimension in pixels of the QR code
 	join: boolean;
-	typeNumber: number;
+	typeNumber: number; // Type number (1 ~ 40), or 0 for auto detection
 	logoInBase64?: string; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. The logo can either be converted to a base64 format by the Svelte QR code component or directly provided as a base64 string
 	logoBackgroundColor?: string; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
 	logoPadding?: number; // Padding around the logo in pixels
@@ -1044,7 +1044,7 @@ class QRCode {
 	public constructor(userOptions: any) {
 		this.options = {
 			data: '',
-			typeNumber: 4,
+			typeNumber: 0,
 			backgroundColor: '#ffffff',
 			anchorColor: '#000000',
 			moduleColor: '#000000',
