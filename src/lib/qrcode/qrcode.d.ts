@@ -8,9 +8,14 @@ declare class QRCode extends SvelteComponent {
 
 		backgroundColor?: string; // Hexadecimal color code or 'transparent'
 		color?: string; // Hexadecimal color code
+		anchorColor: string; // Color of anchors
+		moduleColor: string; // Color for regular modules
+
 		errorCorrectionLevel?: 'L' | 'M' | 'Q' | 'H'; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
+
 		isJoin?: boolean; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
 		isResponsive?: boolean; // If set to true, the QR code will be responsive
+
 		padding?: number; // Padding around the QR code in pixels
 		size?: number; // Width and height dimensions in pixels of the QR code
 		width?: number; // Width dimension in pixels of the QR code

@@ -42,7 +42,8 @@
 interface Options {
 	data: string; // Data of the QR code
 	backgroundColor: string; // Hexadecimal color code or 'transparent'
-	color: string; // Hexadecimal color code
+	anchorColor: string; // Inner color of anchors
+	moduleColor: string; // Color for regular modules
 	errorCorrectionLevel: string; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
 	container?: string;
 	padding: number; // Padding around the QR code in pixels
@@ -1043,15 +1044,16 @@ class QRCode {
 	public constructor(userOptions: any) {
 		this.options = {
 			data: '',
+			typeNumber: 4,
+			backgroundColor: '#ffffff',
+			anchorColor: '#000000',
+			moduleColor: '#000000',
+			errorCorrectionLevel: 'M',
+			join: false,
+			container: 'svg',
 			padding: 4,
 			width: 256,
 			height: 256,
-			typeNumber: 4,
-			color: '#000000',
-			backgroundColor: '#ffffff',
-			errorCorrectionLevel: 'M',
-			container: 'svg',
-			join: true,
 		};
 
 		if (typeof userOptions === 'string') userOptions = { data: userOptions };
@@ -1149,6 +1151,12 @@ class QRCode {
 		return RESULT.length + (RESULT.length != data.length ? 3 : 0);
 	}
 
+	public isAnchor(x: number, y: number, moduleCount: number): boolean {
+		if (x <= 7) return y <= 7 || y >= moduleCount - 7;
+		if (y <= 7) return x >= moduleCount - 7;
+		return false;
+	}
+
 	public svg(): string {
 		const EOL = '';
 		const WIDTH = this.options.width;
@@ -1162,8 +1170,8 @@ class QRCode {
 		const BG_RECT =
 			'<rect x="0" y="0" width="' + WIDTH + '" height="' + HEIGHT + '" style="fill:' + this.options.backgroundColor + ';shape-rendering:crispEdges;"/>' + EOL;
 
-		let modrect = '';
-		let pathdata = '';
+		let moduleSvgData = '';
+		let pathData = '';
 		for (let y = 0; y < LENGTH; y++) {
 			for (let x = 0; x < LENGTH; x++) {
 				const MODULE = MODULES[x][y];
@@ -1181,10 +1189,12 @@ class QRCode {
 						w = Number.isInteger(w) ? Number(w) : w.toFixed(2);
 						h = Number.isInteger(h) ? Number(h) : h.toFixed(2);
 
-						pathdata += 'M' + px + ',' + py + ' V' + h + ' H' + w + ' V' + py + ' H' + px + ' Z ';
+						pathData += 'M' + px + ',' + py + ' V' + h + ' H' + w + ' V' + py + ' H' + px + ' Z ';
 					} else {
+						const COLOR = this.isAnchor(x, y, LENGTH) ? this.options.anchorColor : this.options.moduleColor;
+
 						//Module as rectangle element
-						modrect +=
+						moduleSvgData +=
 							'<rect x="' +
 							px.toString() +
 							'" y="' +
@@ -1194,7 +1204,7 @@ class QRCode {
 							'" height="' +
 							Y_SIZE +
 							'" style="fill:' +
-							this.options.color +
+							COLOR +
 							';shape-rendering:crispEdges;"/>' +
 							EOL;
 					}
@@ -1203,30 +1213,32 @@ class QRCode {
 		}
 
 		if (JOIN) {
-			modrect = '<path x="0" y="0" style="fill:' + this.options.color + ';shape-rendering:crispEdges;" d="' + pathdata + '" />';
+			const COLOR = this.options.moduleColor ? this.options.moduleColor : this.options.anchorColor;
+			moduleSvgData = '<path x="0" y="0" style="fill:' + COLOR + ';shape-rendering:crispEdges;" d="' + pathData + '" />';
 		}
 
 		let svg = '';
 		switch (this.options.container) {
 			case 'svg':
 				svg += '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="' + WIDTH + '" height="' + HEIGHT + '">' + EOL;
-				svg += BG_RECT + modrect;
+				svg += BG_RECT + moduleSvgData;
 				svg += '</svg>';
 				break;
 
 			//Viewbox for responsive use in a browser, thanks to @danioso
 			case 'svg-viewbox':
 				svg += '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ' + WIDTH + ' ' + HEIGHT + '">' + EOL;
-				svg += BG_RECT + modrect;
+				svg += BG_RECT + moduleSvgData;
 				svg += '</svg>';
 				break;
 
 			//Without a container
 			default:
-				svg += BG_RECT + modrect;
+				svg += BG_RECT + moduleSvgData;
 				break;
 		}
 
+		// Insert logo in base64 format if provided
 		if (this.options.logoInBase64) {
 			const SIZE = this.options.width;
 			const LOGO_WIDTH = (SIZE * (this.options.logoWidth || 15)) / 100;

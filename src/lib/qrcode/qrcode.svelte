@@ -9,9 +9,14 @@
 
 	export let backgroundColor = '#ffffff'; // Hexadecimal color code or 'transparent', can be color css name (TOCHECK)
 	export let color = '#000000'; // Hexadecimal color code
+	export let anchorColor = color; // Hexadecimal color code
+	export let moduleColor = color; // Hexadecimal color code
+
 	export let errorCorrectionLevel = 'M'; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
-	export let isJoin = true; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
+
+	export let isJoin = false; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
 	export let isResponsive = false; // If set to true, the QR code will be responsive
+
 	export let padding = 4; // Padding around the QR code in pixels
 	export let size = 256; // Width and height dimensions in pixels of the QR code
 	export let width = size; // Width dimension in pixels of the QR code
@@ -31,15 +36,16 @@
 
 	const OPTIONS: Options = {
 		data,
+		typeNumber: 4,
 		backgroundColor,
-		color,
+		anchorColor,
+		moduleColor,
 		errorCorrectionLevel,
+		join: isJoin,
 		container: isResponsive ? 'svg-viewbox' : 'svg',
 		padding,
 		width,
 		height,
-		join: isJoin,
-		typeNumber: 4,
 		logoInBase64,
 		logoBackgroundColor,
 		logoPadding,
@@ -156,10 +162,22 @@
 
 @param backgroundColor (string) The background color of the QR Code in hexadecimal format or 'transparent'. Default is '#ffffff'
 @param color (string) The color of the QR Code in hexadecimal format. Default is '#000000'
+@param anchorColor (string) The color of the anchor in the QR Code in hexadecimal format. Default is the same as the color property
+@param moduleColor (string) The color of the module in the QR Code in hexadecimal format. Default is the same as the color property
+
+&nbsp;
+
 @param errorCorrectionLevel (string) The error correction level of the QR Code. Possible values: 'L', 'M', 'Q', 'H'. Default is 'M'
-@param isJoin (boolean) // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element. Default is true
+
+&nbsp;
+
+@param isJoin (boolean) // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element. Default is false
+**Note:** The `isJoin` property is useful for performance optimization, especially when generating a large number of QR Codes. However, you cannot have different colors for the anchor and module when `isJoin` is set to true
 @param isResponsive (boolean) With the responsive settings enabled, the size settings will only be used in the code calculation
 and the container will adapt and use all available space in its parent element. Default is true
+
+&nbsp;
+
 @param padding (number) Padding around the QR Code. Default is 4 pixels
 @param size (number) Width and height dimensions in pixels of the QR code. Default is 256 pixels
 @param width (number) The width of the QR Code in pixels. Default is the same as the size property
@@ -179,11 +197,12 @@ There is no validation of the base64 encoding; ensure it is valid. Default is ''
 &nbsp;
 
 @param dispatchDownloadLink (boolean) If set to true, a download link will be generated for the QR Code and dispatched to the parent component. Default is false
+@param downloadLinkFileFormat (string) The file format of the download link. Possible values: 'svg', 'png', 'jpg', 'jpeg', 'webp'. Default is 'svg'
 
 &nbsp;
 &nbsp;
-
 @dispatch downloadLinkGenerated (string) The download link for the QR Code is generated and dispatched to the parent component if the `dispatchDownloadLink` property is set to true
+
 -->
 {#if qrCodeIsVisible}
 	{@html qrCode.svg()}

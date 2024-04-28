@@ -67,10 +67,10 @@
 	<QRCode data="bitcoin:bc1qmhcxtwkcmkqlpajmd09ygzxwwujql74vdpzwd5" />
 </div>
 
-<h2>Join vs not joint</h2>
+<h2>Default not join vs join</h2>
 <div>
+	<QRCode data="https://duxreserve.com" />
 	<QRCode data="https://duxreserve.com" isJoin />
-	<QRCode data="https://duxreserve.com" isJoin={false} />
 </div>
 
 <h2>Size 50 to 200</h2>
@@ -103,6 +103,10 @@
 	<QRCode data="https://duxreserve.com" backgroundColor="#009900" color="#ffffff" />
 
 	<QRCode data="https://duxreserve.com" backgroundColor="#000000" color="#ffffff" />
+
+	<QRCode data="https://duxreserve.com" anchorColor="#00ff00" />
+
+	<QRCode data="https://duxreserve.com" backgroundColor="yellow" anchorColor="green" moduleColor="red" />
 </div>
 
 <h2>Error correction L, M, Q, and H</h2>
