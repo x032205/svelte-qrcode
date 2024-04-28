@@ -11,7 +11,9 @@ declare class QRCode extends SvelteComponent {
 		errorCorrectionLevel?: 'L' | 'M' | 'Q' | 'H'; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
 		isResponsive?: boolean; // If set to true, the QR code will be responsive
 		padding?: number; // Padding around the QR code in pixels
-		size?: number; // Size of the QR code in pixels
+		size?: number; // Width and height dimensions in pixels of the QR code
+		width?: number; // Width dimension in pixels of the QR code
+		height?: number; // Height dimension in pixels of the QR code
 
 		logoInBase64?: string; // base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times
 		logoPath?: string; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. Typically, the logo file is located in the static folder

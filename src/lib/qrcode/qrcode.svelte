@@ -12,7 +12,9 @@
 	export let errorCorrectionLevel = 'M'; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
 	export let isResponsive = false; // If set to true, the QR code will be responsive
 	export let padding = 4; // Padding around the QR code in pixels
-	export let size = 256; // Size of the QR code in pixels
+	export let size = 256; // Width and height dimensions in pixels of the QR code
+	export let width = size; // Width dimension in pixels of the QR code
+	export let height = size; // Height dimension in pixels of the QR code
 
 	export let logoInBase64 = ''; // base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times
 	export let logoPath = ''; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. Typically, the logo file is located in the static folder
@@ -32,8 +34,8 @@
 		errorCorrectionLevel,
 		container: isResponsive ? 'svg-viewbox' : 'svg',
 		padding,
-		width: size,
-		height: size,
+		width,
+		height,
 		join: true,
 		typeNumber: 4,
 		logoInBase64,
@@ -110,7 +112,9 @@
 @param isResponsive (boolean) With the responsive settings enabled, the size settings will only be used in the code calculation
 and the container will adapt and use all available space in its parent element. Default is true
 @param padding (number) Padding around the QR Code. Default is 4 pixels
-@param size (number) The size of the QR Code in pixels. Default is 256 pixels
+@param size (number) Width and height dimensions in pixels of the QR code. Default is 256 pixels
+@param width (number) The width of the QR Code in pixels. Default is the same as the size property
+@param height (number) The height of the QR Code in pixels. Default is the same as the size property
 
 &nbsp;
 

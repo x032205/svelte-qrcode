@@ -48,6 +48,13 @@
 	<QRCode data="https://duxreserve.com" size={200} />
 </div>
 
+<h2>Size with different width and height</h2>
+<div>
+	<QRCode data="https://duxreserve.com" width={100} />
+	<QRCode data="https://duxreserve.com" width={100} height={150} />
+	<QRCode data="https://duxreserve.com" width={150} height={150} />
+</div>
+
 <h2>Padding 0 to 20</h2>
 <div>
 	<QRCode data="https://duxreserve.com" padding={0} />

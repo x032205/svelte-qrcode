@@ -46,8 +46,8 @@ interface Options {
 	errorCorrectionLevel: string; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
 	container?: string;
 	padding: number; // Padding around the QR code in pixels
-	width: number; // Size of the QR code in pixels
-	height: number; // Size of the QR code in pixels
+	width: number; // Width dimension in pixels of the QR code
+	height: number; // Height dimension in pixels of the QR code
 	join: boolean;
 	typeNumber: number;
 	logoInBase64?: string; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. The logo can either be converted to a base64 format by the Svelte QR code component or directly provided as a base64 string
