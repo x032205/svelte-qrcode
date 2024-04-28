@@ -23,6 +23,7 @@ declare class QRCode extends SvelteComponent {
 		waitForLogo?: boolean; // If set to true, the QR code will not render until the logo has fully loaded
 
 		dispatchDownloadLink?: boolean; // If set to true, a download link will be generated for the QR code and dispatched to the parent component
+		downloadLinkFileFormat?: 'svg' | 'png' | 'jpg' | 'jpeg' | 'webp'; // The file format of the download link. Possible values are 'svg', 'png', 'jpg', 'jpeg', 'webp'
 	};
 }
 

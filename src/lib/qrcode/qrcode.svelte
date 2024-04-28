@@ -24,6 +24,7 @@
 	export let waitForLogo = false; // If set to true, the QR code will not render until the logo has fully loaded
 
 	export let dispatchDownloadLink = false; // If set to true, a download link will be generated for the QR code and dispatched to the parent component
+	export let downloadLinkFileFormat = 'svg'; // The file format of the download link. Possible values are 'svg', 'png', 'jpg', 'jpeg', 'webp'. Default is 'svg'
 
 	const dispatch = createEventDispatcher();
 
@@ -70,9 +71,61 @@
 				READER.readAsDataURL(LOGO_BLOB);
 			});
 		} catch (error) {
-			console.error('Failed to convert logo to base64:', error);
+			console.error('convertImageToBase64: Failed to convert logo to base64:', error);
 
 			return '';
+		}
+	};
+
+	const convertQrCodeToFileFormat = (qrCodeSvg: string): void => {
+		// Create a Blob from the SVG data
+		const QR_CODE_BLOB = new Blob([qrCodeSvg], { type: 'image/svg+xml' });
+
+		const QR_CODE_URL = URL.createObjectURL(QR_CODE_BLOB);
+
+		if (downloadLinkFileFormat === 'svg') {
+			// Dispatch the download link for the SVG file without converting it
+			dispatch('downloadLinkGenerated', {
+				url: QR_CODE_URL,
+			});
+		} else {
+			// Load and convert the SVG file to the specified file format
+			const IMAGE = new Image();
+
+			IMAGE.onload = () => {
+				// Create a canvas and draw the image onto it
+				const CANVAS = document.createElement('canvas');
+
+				CANVAS.width = IMAGE.width;
+				CANVAS.height = IMAGE.height;
+
+				const CTX = CANVAS.getContext('2d');
+
+				if (CTX) {
+					CTX.drawImage(IMAGE, 0, 0);
+
+					const FILE_FORMAT =
+						{
+							png: 'image/png',
+							jpg: 'image/jpeg',
+							jpeg: 'image/jpeg',
+							webp: 'image/webp',
+						}[downloadLinkFileFormat] || 'image/png';
+
+					// Convert canvas to the desired file format
+					const CONVERTED_FILE_URL = CANVAS.toDataURL(FILE_FORMAT);
+
+					dispatch('downloadLinkGenerated', {
+						url: CONVERTED_FILE_URL,
+					});
+				}
+			};
+
+			IMAGE.onerror = () => {
+				console.error('convertQrCodeToFileFormat: Error loading or converting the image');
+			};
+
+			IMAGE.src = QR_CODE_URL;
 		}
 	};
 
@@ -87,13 +140,7 @@
 		}
 
 		if (dispatchDownloadLink && qrCode.svg() != null) {
-			const QR_CODE_BLOB: Blob = new Blob([qrCode.svg()], { type: 'image/svg+xml' });
-
-			const QR_CODE_URL: string = URL.createObjectURL(QR_CODE_BLOB);
-
-			dispatch('downloadLinkGenerated', {
-				url: QR_CODE_URL,
-			});
+			convertQrCodeToFileFormat(qrCode.svg());
 		}
 	});
 </script>

@@ -2,7 +2,13 @@
 	import { QRCode } from '$lib/index';
 
 	let downloadUrl = '';
+
 	let downloadUrlDirectBase64 = '';
+
+	let downloadUrlPng = '';
+	let downloadUrlJpg = '';
+	let downloadUrlJpeg = '';
+	let downloadUrlWebp = '';
 
 	const handleDownloadLinkGenerated = (url = '') => {
 		downloadUrl = url;
@@ -10,6 +16,22 @@
 
 	const handleDownloadLinkGeneratedForDirectBase64 = (url = '') => {
 		downloadUrlDirectBase64 = url;
+	};
+
+	const handleDownloadLinkGeneratedPng = (url = '') => {
+		downloadUrlPng = url;
+	};
+
+	const handleDownloadLinkGeneratedJpg = (url = '') => {
+		downloadUrlJpg = url;
+	};
+
+	const handleDownloadLinkGeneratedJpeg = (url = '') => {
+		downloadUrlJpeg = url;
+	};
+
+	const handleDownloadLinkGeneratedWebp = (url = '') => {
+		downloadUrlWebp = url;
 	};
 </script>
 
@@ -188,6 +210,66 @@
 
 {#if downloadUrl}
 	<a href={downloadUrlDirectBase64} download="QR-code-filename-direct-base64" target="_blank">Download QR Code</a>
+{/if}
+
+<p>With download link generated for PNG</p>
+<div>
+	<QRCode
+		data="https://duxreserve.com"
+		logoPath="/logo/lightning.svg"
+		dispatchDownloadLink
+		downloadLinkFileFormat="png"
+		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedPng(data.detail.url)}
+	/>
+</div>
+
+{#if downloadUrlPng}
+	<a href={downloadUrlPng} download="QR-code-filename-png" target="_blank">Download QR Code in png format</a>
+{/if}
+
+<p>With download link generated for JPG</p>
+<div>
+	<QRCode
+		data="https://duxreserve.com"
+		logoPath="/logo/lightning.svg"
+		dispatchDownloadLink
+		downloadLinkFileFormat="jpg"
+		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedJpg(data.detail.url)}
+	/>
+</div>
+
+{#if downloadUrlJpg}
+	<a href={downloadUrlJpg} download="QR-code-filename-jpg" target="_blank">Download QR Code in jpeg (jpg) format</a>
+{/if}
+
+<p>With download link generated for JPEG</p>
+<div>
+	<QRCode
+		data="https://duxreserve.com"
+		logoPath="/logo/lightning.svg"
+		dispatchDownloadLink
+		downloadLinkFileFormat="jpeg"
+		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedJpeg(data.detail.url)}
+	/>
+</div>
+
+{#if downloadUrlJpeg}
+	<a href={downloadUrlJpeg} download="QR-code-filename-jpeg" target="_blank">Download QR Code in jpeg format</a>
+{/if}
+
+<p>With download link generated for WEBP</p>
+<div>
+	<QRCode
+		data="https://duxreserve.com"
+		logoPath="/logo/lightning.svg"
+		dispatchDownloadLink
+		downloadLinkFileFormat="webp"
+		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedWebp(data.detail.url)}
+	/>
+</div>
+
+{#if downloadUrlWebp}
+	<a href={downloadUrlWebp} download="QR-code-filename-webp" target="_blank">Download QR Code in webp format</a>
 {/if}
 
 <h2>Time based one time passwords configuration sample</h2>
