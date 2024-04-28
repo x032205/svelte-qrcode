@@ -10,6 +10,7 @@
 	export let backgroundColor = '#ffffff'; // Hexadecimal color code or 'transparent', can be color css name (TOCHECK)
 	export let color = '#000000'; // Hexadecimal color code
 	export let errorCorrectionLevel = 'M'; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
+	export let isJoin = true; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
 	export let isResponsive = false; // If set to true, the QR code will be responsive
 	export let padding = 4; // Padding around the QR code in pixels
 	export let size = 256; // Width and height dimensions in pixels of the QR code
@@ -37,7 +38,7 @@
 		padding,
 		width,
 		height,
-		join: true,
+		join: isJoin,
 		typeNumber: 4,
 		logoInBase64,
 		logoBackgroundColor,
@@ -156,6 +157,7 @@
 @param backgroundColor (string) The background color of the QR Code in hexadecimal format or 'transparent'. Default is '#ffffff'
 @param color (string) The color of the QR Code in hexadecimal format. Default is '#000000'
 @param errorCorrectionLevel (string) The error correction level of the QR Code. Possible values: 'L', 'M', 'Q', 'H'. Default is 'M'
+@param isJoin (boolean) // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element. Default is true
 @param isResponsive (boolean) With the responsive settings enabled, the size settings will only be used in the code calculation
 and the container will adapt and use all available space in its parent element. Default is true
 @param padding (number) Padding around the QR Code. Default is 4 pixels

@@ -2,6 +2,7 @@
 	import { QRCode } from '$lib/index';
 
 	let downloadUrl = '';
+	let downloadUrlNotJoin = '';
 
 	let downloadUrlDirectBase64 = '';
 
@@ -12,6 +13,10 @@
 
 	const handleDownloadLinkGenerated = (url = '') => {
 		downloadUrl = url;
+	};
+
+	const handleDownloadLinkGeneratedNotJoin = (url = '') => {
+		downloadUrlNotJoin = url;
 	};
 
 	const handleDownloadLinkGeneratedForDirectBase64 = (url = '') => {
@@ -60,6 +65,12 @@
 	<QRCode data="bitcoin:18cBEMRxXHqzWWCxZNtU91F5sbUNKhL5PX" />
 
 	<QRCode data="bitcoin:bc1qmhcxtwkcmkqlpajmd09ygzxwwujql74vdpzwd5" />
+</div>
+
+<h2>Join vs not joint</h2>
+<div>
+	<QRCode data="https://duxreserve.com" isJoin />
+	<QRCode data="https://duxreserve.com" isJoin={false} />
 </div>
 
 <h2>Size 50 to 200</h2>
@@ -195,6 +206,21 @@
 
 {#if downloadUrl}
 	<a href={downloadUrl} download="QR-code-filename" target="_blank">Download QR Code</a>
+{/if}
+
+<h2>With download link generated for not join</h2>
+<div>
+	<QRCode
+		data="https://duxreserve.com"
+		logoPath="/logo/lightning.svg"
+		isJoin={false}
+		dispatchDownloadLink
+		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedNotJoin(data.detail.url)}
+	/>
+</div>
+
+{#if downloadUrlNotJoin}
+	<a href={downloadUrlNotJoin} download="QR-code-filename-not-join" target="_blank">Download QR Code not join</a>
 {/if}
 
 <p>Direct base64 encoded image</p>
