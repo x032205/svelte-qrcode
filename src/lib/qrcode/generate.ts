@@ -27,6 +27,12 @@
  *
  * - Added the possibility to have an image (logo) in the center of the QRCode in base64 format
  *
+ * @version 2.0.0 (2024-04-29)
+ * @editor Alexandre Castlenine
+ *
+ * - Added anchorOuterColor and anchorInnerColor properties
+ * - Added shape property
+ *
  */
 
 //---------------------------------------------------------------------
@@ -42,18 +48,20 @@
 interface Options {
 	data: string; // Data of the QR code
 	backgroundColor: string; // Hexadecimal color code or 'transparent'
-	anchorColor: string; // Inner color of anchors
+	anchorOuterColor: string; // Inner color of anchors
+	anchorInnerColor: string; // Inner color of anchors
 	moduleColor: string; // Color for regular modules
+	shape: string; // Shape of the QR code squares
 	errorCorrectionLevel: string; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
 	container?: string;
-	padding: number; // Padding around the QR code in pixels
+	padding: number; // Padding around the QR code
 	width: number; // Width dimension in pixels of the QR code
 	height: number; // Height dimension in pixels of the QR code
 	join: boolean;
 	typeNumber: number; // Type number (1 ~ 40), or 0 for auto detection
 	logoInBase64?: string; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. The logo can either be converted to a base64 format by the Svelte QR code component or directly provided as a base64 string
 	logoBackgroundColor?: string; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
-	logoPadding?: number; // Padding around the logo in pixels
+	logoPadding?: number; // Padding around the logo
 	logoWidth?: number; // Size of the logo in percentage relative to the QR code width
 }
 
@@ -1046,12 +1054,14 @@ class QRCode {
 			data: '',
 			typeNumber: 0,
 			backgroundColor: '#ffffff',
-			anchorColor: '#000000',
 			moduleColor: '#000000',
+			anchorOuterColor: '#000000',
+			anchorInnerColor: '#000000',
+			shape: 'square',
 			errorCorrectionLevel: 'M',
 			join: false,
 			container: 'svg',
-			padding: 4,
+			padding: 1,
 			width: 256,
 			height: 256,
 		};
@@ -1151,9 +1161,9 @@ class QRCode {
 		return RESULT.length + (RESULT.length != data.length ? 3 : 0);
 	}
 
-	public isAnchor(x: number, y: number, moduleCount: number): boolean {
-		if (x <= 7) return y <= 7 || y >= moduleCount - 7;
-		if (y <= 7) return x >= moduleCount - 7;
+	public isAnchor(x: number, y: number, length: number): boolean {
+		if (x <= 7) return y <= 7 || y >= length - 7;
+		if (y <= 7) return x >= length - 7;
 		return false;
 	}
 
@@ -1167,11 +1177,14 @@ class QRCode {
 		const Y_SIZE = HEIGHT / (LENGTH + 2 * this.options.padding);
 		const JOIN = this.options.join;
 
-		const BG_RECT =
+		// TODO: use template literals
+		const BACKGROUND_RECT =
 			'<rect x="0" y="0" width="' + WIDTH + '" height="' + HEIGHT + '" style="fill:' + this.options.backgroundColor + ';shape-rendering:crispEdges;"/>' + EOL;
 
 		let moduleSvgData = '';
+		let anchorsSvg = '';
 		let pathData = '';
+
 		for (let y = 0; y < LENGTH; y++) {
 			for (let x = 0; x < LENGTH; x++) {
 				const MODULE = MODULES[x][y];
@@ -1191,72 +1204,110 @@ class QRCode {
 
 						pathData += 'M' + px + ',' + py + ' V' + h + ' H' + w + ' V' + py + ' H' + px + ' Z ';
 					} else {
-						const COLOR = this.isAnchor(x, y, LENGTH) ? this.options.anchorColor : this.options.moduleColor;
-
-						//Module as rectangle element
-						moduleSvgData +=
-							'<rect x="' +
-							px.toString() +
-							'" y="' +
-							py.toString() +
-							'" width="' +
-							X_SIZE +
-							'" height="' +
-							Y_SIZE +
-							'" style="fill:' +
-							COLOR +
-							';shape-rendering:crispEdges;"/>' +
-							EOL;
+						if (!this.isAnchor(x, y, LENGTH)) {
+							if (this.options.shape !== 'square') {
+								// Module as circle element
+								moduleSvgData +=
+									'<circle class="modules" cx="' +
+									(px + X_SIZE / 2).toString() + // Set center x
+									'" cy="' +
+									(py + Y_SIZE / 2).toString() + // Set center y
+									'" r="' +
+									(Math.min(X_SIZE, Y_SIZE) / 2).toString() + // Set radius
+									'" style="fill:' +
+									this.options.moduleColor +
+									'rx="0.5"' +
+									';shape-rendering:crispEdges;"/>' +
+									EOL;
+							} else {
+								// Module as rectangle element
+								moduleSvgData +=
+									'<rect x="' +
+									px.toString() +
+									'" y="' +
+									py.toString() +
+									'" width="' +
+									X_SIZE +
+									'" height="' +
+									Y_SIZE +
+									'" style="fill:' +
+									this.options.moduleColor +
+									';shape-rendering:crispEdges;"/>' +
+									EOL;
+							}
+						}
 					}
 				}
 			}
 		}
 
 		if (JOIN) {
-			const COLOR = this.options.moduleColor ? this.options.moduleColor : this.options.anchorColor;
-			moduleSvgData = '<path x="0" y="0" style="fill:' + COLOR + ';shape-rendering:crispEdges;" d="' + pathData + '" />';
+			moduleSvgData = '<path x="0" y="0" style="fill:' + this.options.moduleColor + ';shape-rendering:crispEdges;" d="' + pathData + '" />';
+		} else {
+			const ANCHORS = [
+				['top-left', this.options.padding, this.options.padding],
+				['top-right', LENGTH - 7 + this.options.padding, this.options.padding],
+				['bottom-left', this.options.padding, LENGTH - 7 + this.options.padding],
+			];
+
+			for (const [position, x, y] of ANCHORS) {
+				let outerPath = `M${Number(x)} ${Number(y)} h7 v7 h-7 v-7z m1 1 v5 h5 v-5 h-5 z`;
+				let innerPath = `M${Number(x) + 2} ${Number(y) + 2} h3 v3 h-3 v-3 z`;
+
+				if (this.options.shape !== 'square') {
+					outerPath = `M${
+						Number(x) + 0.5
+					} ${Number(y)}h6s0.5 0 .5 .5v6s0 .5-.5 .5h-6s-.5 0-.5-.5v-6s0-.5 .5-.5zm.75 1s-.25 0-.25 .25v4.5s0 .25 .25 .25h4.5s.25 0 .25-.25v-4.5s0-.25 -.25 -.25h-4.5z`;
+					innerPath = `M${Number(x) + 2.5} ${Number(y) + 2} h2 s.5 0 .5 .5 v2 s0 .5-.5 .5 h-2 s-.5 0-.5-.5 v-2 s0-.5 .5-.5 z`;
+				}
+				const OUTER_ANCHOR = `<path class="anchor-outer" fill="${this.options.anchorOuterColor}" transform="scale(${X_SIZE}, ${Y_SIZE})" d="${outerPath}" />`;
+				const INNER_ANCHOR = `<path class="anchor-inner" fill="${this.options.anchorInnerColor}" transform="scale(${X_SIZE}, ${Y_SIZE})" d="${innerPath}" />`;
+				anchorsSvg += `<g data-position="${position}">${OUTER_ANCHOR} ${INNER_ANCHOR}</g>`;
+			}
+
+			anchorsSvg = `<g class="anchors">${anchorsSvg}</g>`;
 		}
 
 		let svg = '';
 		switch (this.options.container) {
 			case 'svg':
 				svg += '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="' + WIDTH + '" height="' + HEIGHT + '">' + EOL;
-				svg += BG_RECT + moduleSvgData;
+				svg += BACKGROUND_RECT + anchorsSvg + moduleSvgData;
 				svg += '</svg>';
 				break;
 
 			//Viewbox for responsive use in a browser, thanks to @danioso
 			case 'svg-viewbox':
 				svg += '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ' + WIDTH + ' ' + HEIGHT + '">' + EOL;
-				svg += BG_RECT + moduleSvgData;
+				svg += BACKGROUND_RECT + anchorsSvg + moduleSvgData;
 				svg += '</svg>';
 				break;
 
 			//Without a container
 			default:
-				svg += BG_RECT + moduleSvgData;
+				svg += BACKGROUND_RECT + anchorsSvg + moduleSvgData;
 				break;
 		}
 
 		// Insert logo in base64 format if provided
 		if (this.options.logoInBase64) {
-			const SIZE = this.options.width;
-			const LOGO_WIDTH = (SIZE * (this.options.logoWidth || 15)) / 100;
-			const LOGO_PADDING = this.options.logoPadding || 4;
+			const LOGO_SIZE = this.options.width;
+			const LOGO_WIDTH = (LOGO_SIZE * (this.options.logoWidth || 15)) / 100;
+			const LOGO_PADDING = (this.options.logoPadding || 4) + 0.6; // 0.6 is a magic number to align the logo with the QRCode
 			const LOGO_BACKGROUND_COLOR = this.options.logoBackgroundColor || this.options.backgroundColor;
 
-			const X = SIZE / 2 - LOGO_WIDTH / 2;
-			const Y = X; // Center the logo
-			const BG_X = X - LOGO_PADDING;
-			const BG_Y = Y - LOGO_PADDING;
-			const BG_WIDTH = LOGO_WIDTH + LOGO_PADDING * 2;
-			const BG_HEIGHT = BG_WIDTH;
+			const LOGO_X = LOGO_SIZE / 2 - LOGO_WIDTH / 2;
+			const LOGO_Y = LOGO_X; // Center the logo
+			const LOGO_BACKGROUND_X = LOGO_X - LOGO_PADDING;
+			const LOGO_BACKGROUND_Y = LOGO_Y - LOGO_PADDING;
+			const LOGO_BACKGROUND_WIDTH = LOGO_WIDTH + LOGO_PADDING * 2;
+			const LOGO_BACKGROUND_HEIGHT = LOGO_BACKGROUND_WIDTH;
 
-			const LOGO_BACKGROUND_RECT = `<rect x="${BG_X}" y="${BG_Y}" width="${BG_WIDTH}" height="${BG_HEIGHT}" fill="${LOGO_BACKGROUND_COLOR}" />`;
-			const IMAGE = `<image href="${this.options.logoInBase64}" x="${X}" y="${Y}" width="${LOGO_WIDTH}" height="${LOGO_WIDTH}" preserveAspectRatio="xMidYMid meet"/>`;
+			const LOGO_BACKGROUND_RECT = `<rect x="${LOGO_BACKGROUND_X}" y="${LOGO_BACKGROUND_Y}" width="${LOGO_BACKGROUND_WIDTH}" height="${LOGO_BACKGROUND_HEIGHT}" fill="${LOGO_BACKGROUND_COLOR}" />`;
+			const LOGO = `<image href="${this.options.logoInBase64}" x="${LOGO_X}" y="${LOGO_Y}" width="${LOGO_WIDTH}" height="${LOGO_WIDTH}" preserveAspectRatio="xMidYMid meet"/>`;
 
 			const CLOSING_TAG_POS = svg.lastIndexOf('</svg>');
-			svg = svg.substring(0, CLOSING_TAG_POS) + LOGO_BACKGROUND_RECT + IMAGE + svg.substring(CLOSING_TAG_POS);
+			svg = svg.substring(0, CLOSING_TAG_POS) + LOGO_BACKGROUND_RECT + LOGO + svg.substring(CLOSING_TAG_POS);
 		}
 
 		return svg;

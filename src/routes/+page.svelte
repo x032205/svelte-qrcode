@@ -112,9 +112,15 @@
 
 	<QRCode data="https://duxreserve.com" backgroundColor="#000000" color="#ffffff" />
 
-	<QRCode data="https://duxreserve.com" anchorColor="#00ff00" />
+	<QRCode data="https://duxreserve.com" anchorOuterColor="#00ff00" anchorInnerColor="#ff0000" />
 
-	<QRCode data="https://duxreserve.com" backgroundColor="yellow" anchorColor="green" moduleColor="red" />
+	<QRCode data="https://duxreserve.com" backgroundColor="yellow" moduleColor="red" anchorInnerColor="green" />
+</div>
+
+<h2>Shape</h2>
+<div>
+	<QRCode data="https://duxreserve.com" shape="square" />
+	<QRCode data="https://duxreserve.com" shape="circle" />
 </div>
 
 <h2>Error correction L, M, Q, and H</h2>
@@ -168,7 +174,7 @@
 </div>
 
 <p>Wait for logo</p>
-<!-- QRCode size of 256x256 + padding of 4 px = 260px total -->
+
 <div style="min-width: 260px; min-height: 260px;">
 	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.gif" waitForLogo />
 </div>
@@ -240,8 +246,9 @@
 	<QRCode
 		data="https://duxreserve.com"
 		backgroundColor="yellow"
-		anchorColor="green"
 		moduleColor="red"
+		anchorOuterColor="green"
+		anchorInnerColor="orange"
 		logoPath="/logo/lightning.svg"
 		logoBackgroundColor="blue"
 		dispatchDownloadLink

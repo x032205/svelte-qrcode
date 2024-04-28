@@ -11,15 +11,18 @@
 
 	export let backgroundColor = '#ffffff'; // Hexadecimal color code or 'transparent', can be color css name (TOCHECK)
 	export let color = '#000000'; // Hexadecimal color code
-	export let anchorColor = color; // Hexadecimal color code
 	export let moduleColor = color; // Hexadecimal color code
+	export let anchorOuterColor = moduleColor; // Hexadecimal color code
+	export let anchorInnerColor = anchorOuterColor; // Hexadecimal color code
+
+	export let shape = 'square'; // Shape of the QR code. Possible values are 'square' or 'circle'
 
 	export let errorCorrectionLevel = 'M'; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
 
 	export let isJoin = false; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
 	export let isResponsive = false; // If set to true, the QR code will be responsive
 
-	export let padding = 4; // Padding around the QR code in pixels
+	export let padding = 1; // Padding around the QR code
 	export let size = 256; // Width and height dimensions in pixels of the QR code
 	export let width = size; // Width dimension in pixels of the QR code
 	export let height = size; // Height dimension in pixels of the QR code
@@ -27,7 +30,7 @@
 	export let logoInBase64 = ''; // base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times
 	export let logoPath = ''; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. Typically, the logo file is located in the static folder
 	export let logoBackgroundColor = ''; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
-	export let logoPadding = 4; // Padding around the logo in pixels
+	export let logoPadding = 4; // Padding around the logo
 	export let logoWidth = 15; // Size of the logo in percentage relative to the QR code width
 	export let waitForLogo = false; // If set to true, the QR code will not render until the logo has fully loaded
 
@@ -40,8 +43,10 @@
 		data,
 		typeNumber,
 		backgroundColor,
-		anchorColor,
+		anchorOuterColor,
+		anchorInnerColor,
 		moduleColor,
+		shape,
 		errorCorrectionLevel,
 		join: isJoin,
 		container: isResponsive ? 'svg-viewbox' : 'svg',
@@ -168,8 +173,13 @@
 
 @param backgroundColor (string) The background color of the QR Code in hexadecimal format or 'transparent'. Default is '#ffffff'
 @param color (string) The color of the QR Code in hexadecimal format. Default is '#000000'
-@param anchorColor (string) The color of the anchor in the QR Code in hexadecimal format. Default is the same as the color property
 @param moduleColor (string) The color of the module in the QR Code in hexadecimal format. Default is the same as the color property
+@param anchorOuterColor (string) The color of the outer anchor in the QR Code in hexadecimal format. Default is the same as the moduleColor property
+@param anchorInnerColor (string) The color of the inner anchor in the QR Code in hexadecimal format. Default is the same as the anchorOuterColor property
+
+&nbsp;
+
+@param shape (string) The shape of the QR Code. Possible values: 'square', 'circle'. Default is 'square'
 
 &nbsp;
 
@@ -184,7 +194,7 @@ and the container will adapt and use all available space in its parent element. 
 
 &nbsp;
 
-@param padding (number) Padding around the QR Code. Default is 4 pixels
+@param padding (number) Padding around the QR Code. Default is 1
 @param size (number) Width and height dimensions in pixels of the QR code. Default is 256 pixels
 @param width (number) The width of the QR Code in pixels. Default is the same as the size property
 @param height (number) The height of the QR Code in pixels. Default is the same as the size property
@@ -196,7 +206,7 @@ There is no validation of the base64 encoding; ensure it is valid. Default is ''
 @param logoPath (string) The path to the logo file to be added to the center of the QR Code. Default is '' (no logo).
 **Note:** With the logo, it is recommended to have a minimum error correction level of 'M' to ensure the QR Code is readable
 @param logoBackgroundColor (string) The background color of the logo in hexadecimal format or 'transparent'. Default is '' (same as the QR Code backgroundColor property)
-@param logoPadding (number) Padding around the logo in pixels. Default is 4 pixels
+@param logoPadding (number) Padding around the logo. Default is 4
 @param logoWidth (number) The size of the logo in percentage relative to the QR Code width. Default is 15%
 @param waitForLogo (boolean) If set to true, the QR Code will not render until the logo has fully loaded. Default is false
 
