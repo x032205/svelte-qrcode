@@ -1095,8 +1095,8 @@ class QRCode {
 
 		const CONTENT = this.options.data;
 		const TYPE = this._getTypeNumber(CONTENT, this.options.errorCorrectionLevel);
-		const ECL = this._getErrorCorrectLevel(this.options.errorCorrectionLevel);
-		this.qrCodeModel = new QRCodeModel(TYPE, ECL);
+		const ERROR_CORRECTION_LEVEL = this._getErrorCorrectLevel(this.options.errorCorrectionLevel);
+		this.qrCodeModel = new QRCodeModel(TYPE, ERROR_CORRECTION_LEVEL);
 		this.qrCodeModel.addData(CONTENT);
 		this.qrCodeModel.make();
 	}
