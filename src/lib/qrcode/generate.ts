@@ -40,17 +40,17 @@
 //---------------------------------------------------------------------
 
 interface Options {
-	content: string; // Content of the QR code
-	background: string; // Hexadecimal color code or 'transparent'
+	data: string; // Data of the QR code
+	backgroundColor: string; // Hexadecimal color code or 'transparent'
 	color: string; // Hexadecimal color code
-	ecl: string; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
+	errorCorrectionLevel: string; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
 	container?: string;
 	padding: number; // Padding around the QR code in pixels
 	width: number; // Size of the QR code in pixels
 	height: number; // Size of the QR code in pixels
 	join: boolean;
 	typeNumber: number;
-	base64Image?: string; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. The logo can either be converted to a base64 format by the Svelte QR code component or directly provided as a base64 string
+	logoInBase64?: string; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. The logo can either be converted to a base64 format by the Svelte QR code component or directly provided as a base64 string
 	logoBackgroundColor?: string; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
 	logoPadding?: number; // Padding around the logo in pixels
 	logoWidth?: number; // Size of the logo in percentage relative to the QR code width
@@ -1066,19 +1066,19 @@ class QRCode {
 
 	public constructor(userOptions: any) {
 		this.options = {
-			content: '',
-			padding: 8,
+			data: '',
+			padding: 4,
 			width: 256,
 			height: 256,
 			typeNumber: 4,
 			color: '#000000',
-			background: '#ffffff',
-			ecl: 'M',
+			backgroundColor: '#ffffff',
+			errorCorrectionLevel: 'M',
 			container: 'svg',
 			join: true,
 		};
 
-		if (typeof userOptions === 'string') userOptions = { content: userOptions };
+		if (typeof userOptions === 'string') userOptions = { data: userOptions };
 		if (userOptions) {
 			for (const I in userOptions as Options) {
 				// @ts-ignore
@@ -1086,23 +1086,23 @@ class QRCode {
 			}
 		}
 
-		if (this.options.content.length === 0 || this.options.content.length > 7000) {
-			throw new Error("Expected 'content' to be non-empty and less than 6K !");
+		if (this.options.data.length === 0 || this.options.data.length > 7000) {
+			throw new Error("Expected 'data' to be non-empty and less than 6K !");
 		}
 		if (this.options.padding < 1) this.options.padding = 1;
 		if (this.options.width < 1) this.options.width = 256;
 		if (this.options.height < 1) this.options.height = 256;
 
-		const CONTENT = this.options.content;
-		const TYPE = this._getTypeNumber(CONTENT, this.options.ecl);
-		const ECL = this._getErrorCorrectLevel(this.options.ecl);
+		const CONTENT = this.options.data;
+		const TYPE = this._getTypeNumber(CONTENT, this.options.errorCorrectionLevel);
+		const ECL = this._getErrorCorrectLevel(this.options.errorCorrectionLevel);
 		this.qrCodeModel = new QRCodeModel(TYPE, ECL);
 		this.qrCodeModel.addData(CONTENT);
 		this.qrCodeModel.make();
 	}
 
-	public _getErrorCorrectLevel(ecl: string) {
-		switch (ecl.toUpperCase()) {
+	public _getErrorCorrectLevel(errorCorrectionLevel: string) {
+		switch (errorCorrectionLevel.toUpperCase()) {
 			case 'L':
 				return QRErrorCorrectLevel.L;
 
@@ -1116,12 +1116,12 @@ class QRCode {
 				return QRErrorCorrectLevel.H;
 
 			default:
-				throw new Error('Unknown error correction level: ' + ecl);
+				throw new Error('Unknown error correction level: ' + errorCorrectionLevel);
 		}
 	}
 
-	public _getTypeNumber(content: string, ecl: string) {
-		const LENGTH = this._getUTF8Length(content);
+	public _getTypeNumber(data: string, errorCorrectionLevel: string) {
+		const LENGTH = this._getUTF8Length(data);
 
 		let type = 1;
 		let limit = 0;
@@ -1129,10 +1129,10 @@ class QRCode {
 		for (let i = 0, len = QR_CODE_LIMIT_LENGTH.length; i <= len; i++) {
 			const TABLE = QR_CODE_LIMIT_LENGTH[i];
 			if (!TABLE) {
-				throw new Error('Content too long: expected ' + limit + ' but got ' + LENGTH);
+				throw new Error('Data too long: expected ' + limit + ' but got ' + LENGTH);
 			}
 
-			switch (ecl.toUpperCase()) {
+			switch (errorCorrectionLevel.toUpperCase()) {
 				case 'L':
 					limit = TABLE[0];
 					break;
@@ -1150,7 +1150,7 @@ class QRCode {
 					break;
 
 				default:
-					throw new Error('Unknown error correction level: ' + ecl);
+					throw new Error('Unknown error correction level: ' + errorCorrectionLevel);
 			}
 
 			if (LENGTH <= limit) {
@@ -1160,17 +1160,17 @@ class QRCode {
 			type++;
 		}
 		if (type > QR_CODE_LIMIT_LENGTH.length) {
-			throw new Error('Content too long');
+			throw new Error('Data too long');
 		}
 
 		return type;
 	}
 
-	public _getUTF8Length(content: string) {
-		const RESULT = encodeURI(content)
+	public _getUTF8Length(data: string) {
+		const RESULT = encodeURI(data)
 			.toString()
 			.replace(/\%[0-9a-fA-F]{2}/g, 'a');
-		return RESULT.length + (RESULT.length != content.length ? 3 : 0);
+		return RESULT.length + (RESULT.length != data.length ? 3 : 0);
 	}
 
 	public svg(): string {
@@ -1184,7 +1184,7 @@ class QRCode {
 		const JOIN = this.options.join;
 
 		const BG_RECT =
-			'<rect x="0" y="0" width="' + WIDTH + '" height="' + HEIGHT + '" style="fill:' + this.options.background + ';shape-rendering:crispEdges;"/>' + EOL;
+			'<rect x="0" y="0" width="' + WIDTH + '" height="' + HEIGHT + '" style="fill:' + this.options.backgroundColor + ';shape-rendering:crispEdges;"/>' + EOL;
 
 		let modrect = '';
 		let pathdata = '';
@@ -1251,11 +1251,11 @@ class QRCode {
 				break;
 		}
 
-		if (this.options.base64Image) {
+		if (this.options.logoInBase64) {
 			const SIZE = this.options.width;
 			const LOGO_WIDTH = (SIZE * (this.options.logoWidth || 15)) / 100;
 			const LOGO_PADDING = this.options.logoPadding || 4;
-			const LOGO_BACKGROUND_COLOR = this.options.logoBackgroundColor || this.options.background;
+			const LOGO_BACKGROUND_COLOR = this.options.logoBackgroundColor || this.options.backgroundColor;
 
 			const X = SIZE / 2 - LOGO_WIDTH / 2;
 			const Y = X; // Center the logo
@@ -1265,7 +1265,7 @@ class QRCode {
 			const BG_HEIGHT = BG_WIDTH;
 
 			const LOGO_BACKGROUND_RECT = `<rect x="${BG_X}" y="${BG_Y}" width="${BG_WIDTH}" height="${BG_HEIGHT}" fill="${LOGO_BACKGROUND_COLOR}" />`;
-			const IMAGE = `<image href="${this.options.base64Image}" x="${X}" y="${Y}" width="${LOGO_WIDTH}" height="${LOGO_WIDTH}" preserveAspectRatio="xMidYMid meet"/>`;
+			const IMAGE = `<image href="${this.options.logoInBase64}" x="${X}" y="${Y}" width="${LOGO_WIDTH}" height="${LOGO_WIDTH}" preserveAspectRatio="xMidYMid meet"/>`;
 
 			const CLOSING_TAG_POS = svg.lastIndexOf('</svg>');
 			svg = svg.substring(0, CLOSING_TAG_POS) + LOGO_BACKGROUND_RECT + IMAGE + svg.substring(CLOSING_TAG_POS);

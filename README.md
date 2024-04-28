@@ -17,7 +17,7 @@ Now you can start adding QR Codes to your pages.
   import QRCode from "@castlenine/svelte-qrcode"
 </script>
 
-<QRCode content="Test" />
+<QRCode data="Test" />
 ```
 
 ![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample1.svg?sanitize=true)
@@ -30,12 +30,12 @@ QR Code is capable of handling all types of data, such as numeric and alphabetic
 
 ## Properties
 
-### Content
+### Data
 
-Content is the string value that needs to be send to the code reader. The text is normally an URL to a web site, or a code that is used by an application, for example in handling secrets in time-based one-time password applications.
+Data to encode in QR code. The data is normally an URL to a web site, or a code that is used by an application, for example in handling secrets in time-based one-time password applications.
 
 ```svelte
-<QRCode content="https://duxreserve.com" />
+<QRCode data="https://duxreserve.com" />
 ```
 
 ### Size, padding and responsive
@@ -45,11 +45,11 @@ You can set the size used for generation, the larger the size, the more informat
 With the `isResponsive` settings enabled, the size settings will only be used in the code calculation, and the container will adapt and use all available space in its parent element.
 
 ```svelte
-<QRCode content="https://duxreserve.com" size={50} />
+<QRCode data="https://duxreserve.com" size={50} />
 
-<QRCode content="https://duxreserve.com" padding={10} />
+<QRCode data="https://duxreserve.com" padding={10} />
 
-<QRCode content="https://duxreserve.com" isResponsive />
+<QRCode data="https://duxreserve.com" isResponsive />
 ```
 
 ### Colors
@@ -57,16 +57,17 @@ With the `isResponsive` settings enabled, the size settings will only be used in
 With the color settings, you can control both the front and background color (in hexadecimal color or "transparent").
 
 ```svelte
-<QRCode content="https://duxreserve.com" color="#009900" />
+<QRCode data="https://duxreserve.com" color="#009900" />
 
-<QRCode content="https://duxreserve.com" backgroundColor="#009900" color="#ffffff" />
+<QRCode data="https://duxreserve.com" backgroundColor="#009900" color="#ffffff" />
 ```
 
 ![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample2.svg?sanitize=true)
 
-#### QR Code error correction
+#### QR Code error correction level
 
 QR Code has error correction capability to restore data if the code is dirty or damaged. Four error correction levels are available to choose according to the operating environment. Raising this level improves error correction capability but also increases the amount of data QR Code size.
+
 To select error correction level, various factors such as the operating environment and QR Code size need to be considered. Level Q or H may be selected for factory environment where QR Code get dirty, whereas Level L may be selected for a clean environment with the large amount of data. Typically, Level M (15%) is most frequently selected.
 
 - Level `L` Approx 7%
@@ -75,20 +76,20 @@ To select error correction level, various factors such as the operating environm
 - Level `H` Approx 30%
 
 ```svelte
-<QRCode content="https://duxreserve.com" errorCorrection="L" />
+<QRCode data="https://duxreserve.com" errorCorrectionLevel="L" />
 
-<QRCode content="https://duxreserve.com" errorCorrection="M" />
+<QRCode data="https://duxreserve.com" errorCorrectionLevel="M" />
 
-<QRCode content="https://duxreserve.com" errorCorrection="Q" />
+<QRCode data="https://duxreserve.com" errorCorrectionLevel="Q" />
 
-<QRCode content="https://duxreserve.com" errorCorrection="H" />
+<QRCode data="https://duxreserve.com" errorCorrectionLevel="H" />
 ```
 
 ### Centered logo
 
 You can add a logo to the center of the QR code; it will be automatically scaled to fit and inserted in the generated SVG image.
 
-- `base64Image`: base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times. There is no validation of the base64 encoding; ensure it is valid
+- `logoInBase64`: base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times. There is no validation of the base64 encoding; ensure it is valid
 
 - `logoPath`: The path to the logo image can be either a local path or a URL. Typically, the logo file is located in the static folder. If the path is incorrect or undefined, the logo will not be displayed. It uses the Fetch API to load the image; therefore, if the URL is external, it must be CORS-enabled. Note that there may be a slight delay in loading the image
 
@@ -96,23 +97,23 @@ You can add a logo to the center of the QR code; it will be automatically scaled
 - `logoPadding`: The padding around the logo in pixels. The default value is 4 pixels
 - `logoSize`: The size of the logo as a percentage of the QR code's size. The default value is 15% of the QR code size
 
-**Note:** It is recommended to set the QR Code error correction level (`errorCorrection`) to `M` or higher to ensure the QR code remains readable with the logo. Make sure the `logoPadding` or `logoSize` are not too large. Verify the result by scanning the QR code.
+**Note:** It is recommended to set the QR Code error correction level (`errorCorrectionLevel`) to `M` or higher to ensure the QR code remains readable with the logo. Make sure the `logoPadding` or `logoSize` are not too large. Verify the result by scanning the QR code.
 
 **Tested with:** .svg, .png, .jpeg, .gif & .webp. May work with other formats as well.
 
 ```svelte
-<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" />
+<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" />
 
-<QRCode content="https://duxreserve.com" logoPath="logo/lightning.svg" logoBackgroundColor="#009900" />
+<QRCode data="https://duxreserve.com" logoPath="logo/lightning.svg" logoBackgroundColor="#009900" />
 
-<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoPadding={10} />
+<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoPadding={10} />
 
-<QRCode content="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoWidth={20} />
+<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoWidth={20} />
 
 <!-- External URL -->
 
 <QRCode
-  content="https://duxreserve.com"
+  data="https://duxreserve.com"
   logoPath="https://upload.wikimedia.org/wikipedia/commons/a/a8/Lightning_bolt_simple.png"
   logoBackgroundColor="#009900"
 />
@@ -120,8 +121,8 @@ You can add a logo to the center of the QR code; it will be automatically scaled
 <!-- Direct base64 encoded image -->
 
 <QRCode
-  content="https://duxreserve.com"
-  base64Image="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Im0xOC40OTYgMTAuNzA5bC04LjYzNiA4Ljg4Yy0uMjQuMjQ2LS42MzgtLjAzOS0uNDgyLS4zNDVsMy4wNzQtNi4wNjZhLjMuMyAwIDAgMC0uMjY4LS40MzZINS43MThhLjMuMyAwIDAgMS0uMjE0LS41MWw4LjAxLTguMTE1Yy4yMzItLjIzNS42MTguMDIzLjQ4OS4zMjhMMTEuNzA2IDkuODZhLjMuMyAwIDAgMCAuMjguNDE3bDYuMjkxLS4wNzhhLjMuMyAwIDAgMSAuMjIuNTA5Ii8+PC9zdmc+"
+  data="https://duxreserve.com"
+  logoInBase64="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Im0xOC40OTYgMTAuNzA5bC04LjYzNiA4Ljg4Yy0uMjQuMjQ2LS42MzgtLjAzOS0uNDgyLS4zNDVsMy4wNzQtNi4wNjZhLjMuMyAwIDAgMC0uMjY4LS40MzZINS43MThhLjMuMyAwIDAgMS0uMjE0LS41MWw4LjAxLTguMTE1Yy4yMzItLjIzNS42MTguMDIzLjQ4OS4zMjhMMTEuNzA2IDkuODZhLjMuMyAwIDAgMCAuMjguNDE3bDYuMjkxLS4wNzhhLjMuMyAwIDAgMSAuMjIuNTA5Ii8+PC9zdmc+"
   logoBackgroundColor="#eeff00"
 />
 ```
@@ -149,7 +150,7 @@ Additionally, include the `target="_blank"` attribute in the anchor tag to open 
 
 <div>
   <QRCode
-    content="https://duxreserve.com"
+    data="https://duxreserve.com"
     logoPath="/logo/lightning.svg"
     dispatchDownloadLink
     on:downloadLinkGenerated={(data) => handleDownloadLinkGenerated(data.detail.url)}
@@ -166,7 +167,7 @@ Additionally, include the `target="_blank"` attribute in the anchor tag to open 
 Sample URL for a John Doe user on the Acme app:
 
 ```svelte
-<QRCode content="otpauth://totp/ACME%20Co:john.doe@email.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30" />
+<QRCode data="otpauth://totp/ACME%20Co:john.doe@email.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME%20Co&algorithm=SHA1&digits=6&period=30" />
 ```
 
 ![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample3.svg?sanitize=true)

@@ -5,16 +5,16 @@
 
 	import { QRCode } from './generate';
 
-	export let content = ''; // Content of the QR code
+	export let data = ''; // Data of the QR code
 
-	export let backgroundColor = '#ffffff'; // Hexadecimal color code or 'transparent'
+	export let backgroundColor = '#ffffff'; // Hexadecimal color code or 'transparent', can be color css name (TOCHECK)
 	export let color = '#000000'; // Hexadecimal color code
-	export let errorCorrection = 'M'; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
+	export let errorCorrectionLevel = 'M'; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
 	export let isResponsive = false; // If set to true, the QR code will be responsive
 	export let padding = 4; // Padding around the QR code in pixels
-	export let size = 150; // Size of the QR code in pixels
+	export let size = 256; // Size of the QR code in pixels
 
-	export let base64Image = ''; // base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times
+	export let logoInBase64 = ''; // base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times
 	export let logoPath = ''; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. Typically, the logo file is located in the static folder
 	export let logoBackgroundColor = ''; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
 	export let logoPadding = 4; // Padding around the logo in pixels
@@ -25,17 +25,17 @@
 	const dispatch = createEventDispatcher();
 
 	const OPTIONS: Options = {
-		content,
-		background: backgroundColor,
+		data,
+		backgroundColor,
 		color,
-		ecl: errorCorrection,
+		errorCorrectionLevel,
 		container: isResponsive ? 'svg-viewbox' : 'svg',
 		padding,
 		width: size,
 		height: size,
 		join: true,
 		typeNumber: 4,
-		base64Image,
+		logoInBase64,
 		logoBackgroundColor,
 		logoPadding,
 		logoWidth,
@@ -70,9 +70,9 @@
 	};
 
 	onMount(async () => {
-		if (!base64Image && logoPath) {
+		if (!logoInBase64 && logoPath) {
 			// Reload the QR Code with logo included from the logoPath
-			OPTIONS.base64Image = await convertImageToBase64(logoPath);
+			OPTIONS.logoInBase64 = await convertImageToBase64(logoPath);
 
 			qrCode = new QRCode(OPTIONS);
 		}
@@ -93,21 +93,21 @@
 @component
 ### QR Code
 
-@param content (string) The content of the QR Code to be encoded
+@param data (string) Data to encode in QR code
 
 &nbsp;
 
 @param backgroundColor (string) The background color of the QR Code in hexadecimal format or 'transparent'. Default is '#ffffff'
 @param color (string) The color of the QR Code in hexadecimal format. Default is '#000000'
-@param errorCorrection (string) The error correction level of the QR Code. Possible values: 'L', 'M', 'Q', 'H'. Default is 'M'
+@param errorCorrectionLevel (string) The error correction level of the QR Code. Possible values: 'L', 'M', 'Q', 'H'. Default is 'M'
 @param isResponsive (boolean) With the responsive settings enabled, the size settings will only be used in the code calculation
 and the container will adapt and use all available space in its parent element. Default is true
 @param padding (number) Padding around the QR Code. Default is 4 pixels
-@param size (number) The size of the QR Code in pixels. Default is 150 pixels
+@param size (number) The size of the QR Code in pixels. Default is 256 pixels
 
 &nbsp;
 
-@param base64Image (string) base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times.
+@param logoInBase64 (string) base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times.
 There is no validation of the base64 encoding; ensure it is valid. Default is '' (no logo)
 @param logoPath (string) The path to the logo file to be added to the center of the QR Code. Default is '' (no logo).
 **Note:** With the logo, it is recommended to have a minimum error correction level of 'M' to ensure the QR Code is readable
