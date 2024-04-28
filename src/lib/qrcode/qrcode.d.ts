@@ -18,6 +18,7 @@ declare class QRCode extends SvelteComponent {
 		logoBackgroundColor?: string; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
 		logoPadding?: number; // Padding around the logo in pixels
 		logoWidth?: number; // Size of the logo in percentage relative to the QR code width
+		waitForLogo?: boolean; // If set to true, the QR code will not render until the logo has fully loaded
 
 		dispatchDownloadLink?: boolean; // If set to true, a download link will be generated for the QR code and dispatched to the parent component
 	};

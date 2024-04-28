@@ -19,6 +19,7 @@
 	export let logoBackgroundColor = ''; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
 	export let logoPadding = 4; // Padding around the logo in pixels
 	export let logoWidth = 15; // Size of the logo in percentage relative to the QR code width
+	export let waitForLogo = false; // If set to true, the QR code will not render until the logo has fully loaded
 
 	export let dispatchDownloadLink = false; // If set to true, a download link will be generated for the QR code and dispatched to the parent component
 
@@ -40,6 +41,10 @@
 		logoPadding,
 		logoWidth,
 	};
+
+	// If the logo is not set, the QR code will be visible immediately
+	// Otherwise, it will be visible after the logo has been loaded if `waitForLogo` is set to true
+	let qrCodeIsVisible: boolean = Boolean(logoInBase64) || !waitForLogo;
 
 	let qrCode: QRCode = new QRCode(OPTIONS);
 
@@ -75,6 +80,8 @@
 			OPTIONS.logoInBase64 = await convertImageToBase64(logoPath);
 
 			qrCode = new QRCode(OPTIONS);
+
+			qrCodeIsVisible = true;
 		}
 
 		if (dispatchDownloadLink && qrCode.svg() != null) {
@@ -114,6 +121,7 @@ There is no validation of the base64 encoding; ensure it is valid. Default is ''
 @param logoBackgroundColor (string) The background color of the logo in hexadecimal format or 'transparent'. Default is '' (same as the QR Code backgroundColor property)
 @param logoPadding (number) Padding around the logo in pixels. Default is 4 pixels
 @param logoWidth (number) The size of the logo in percentage relative to the QR Code width. Default is 15%
+@param waitForLogo (boolean) If set to true, the QR Code will not render until the logo has fully loaded. Default is false
 
 &nbsp;
 
@@ -124,5 +132,6 @@ There is no validation of the base64 encoding; ensure it is valid. Default is ''
 
 @dispatch downloadLinkGenerated (string) The download link for the QR Code is generated and dispatched to the parent component if the `dispatchDownloadLink` property is set to true
 -->
-
-{@html qrCode.svg()}
+{#if qrCodeIsVisible}
+	{@html qrCode.svg()}
+{/if}
