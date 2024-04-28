@@ -2,7 +2,9 @@
 	import { QRCode } from '$lib/index';
 
 	let downloadUrl = '';
-	let downloadUrlNotJoin = '';
+	let downloadUrlJoin = '';
+
+	let downloadUrlCustomColor = '';
 
 	let downloadUrlDirectBase64 = '';
 
@@ -15,8 +17,12 @@
 		downloadUrl = url;
 	};
 
-	const handleDownloadLinkGeneratedNotJoin = (url = '') => {
-		downloadUrlNotJoin = url;
+	const handleDownloadLinkGeneratedJoin = (url = '') => {
+		downloadUrlJoin = url;
+	};
+
+	const handleDownloadLinkGeneratedCustomColor = (url = '') => {
+		downloadUrlCustomColor = url;
 	};
 
 	const handleDownloadLinkGeneratedForDirectBase64 = (url = '') => {
@@ -217,14 +223,32 @@
 	<QRCode
 		data="https://duxreserve.com"
 		logoPath="/logo/lightning.svg"
-		isJoin={false}
+		isJoin
 		dispatchDownloadLink
-		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedNotJoin(data.detail.url)}
+		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedJoin(data.detail.url)}
 	/>
 </div>
 
-{#if downloadUrlNotJoin}
-	<a href={downloadUrlNotJoin} download="QR-code-filename-not-join" target="_blank">Download QR Code not join</a>
+{#if downloadUrlJoin}
+	<a href={downloadUrlJoin} download="QR-code-filename-not-join" target="_blank">Download QR Code join</a>
+{/if}
+
+<h2>With download link generated for custom color</h2>
+<div>
+	<QRCode
+		data="https://duxreserve.com"
+		backgroundColor="yellow"
+		anchorColor="green"
+		moduleColor="red"
+		logoPath="/logo/lightning.svg"
+		logoBackgroundColor="blue"
+		dispatchDownloadLink
+		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedCustomColor(data.detail.url)}
+	/>
+</div>
+
+{#if downloadUrlCustomColor}
+	<a href={downloadUrlCustomColor} download="QR-code-filename-not-join" target="_blank">Download QR Code custom color</a>
 {/if}
 
 <p>Direct base64 encoded image</p>
