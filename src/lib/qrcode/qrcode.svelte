@@ -135,9 +135,9 @@
 			OPTIONS.logoInBase64 = await convertImageToBase64(logoPath);
 
 			qrCode = new QRCode(OPTIONS);
-
-			qrCodeIsVisible = true;
 		}
+
+		qrCodeIsVisible = true;
 
 		if (dispatchDownloadLink && qrCode.svg() != null) {
 			convertQrCodeToFileFormat(qrCode.svg());
