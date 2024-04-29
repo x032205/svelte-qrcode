@@ -31,7 +31,7 @@
  * @editor Alexandre Castlenine
  *
  * - Rename some properties to make them more explicit (follow the migration guide to learn more)
- * - Added anchorOuterColor and anchorInnerColor properties
+ * - Added anchorsOuterColor and anchorsInnerColor properties
  * - Added shape property
  * - Code refactored to use template literals
  *
@@ -50,9 +50,9 @@
 interface Options {
 	data: string; // Data of the QR code to be encoded
 	backgroundColor: string; // Background color of the QR code
-	anchorOuterColor: string; // Outer color of QR anchors
-	anchorInnerColor: string; // Inner color of QR anchors
-	moduleColor: string; // Color for QR modules
+	anchorsOuterColor: string; // Outer color of QR anchors
+	anchorsInnerColor: string; // Inner color of QR anchors
+	modulesColor: string; // Color for QR modules
 	shape: 'square' | 'circle'; // Shape of the QR code modules and anchors
 	errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H'; // Error correction level
 	container?: string; // Container element to render the QR code
@@ -1098,9 +1098,9 @@ class QRCode {
 			data: '',
 			typeNumber: 0,
 			backgroundColor: '#ffffff',
-			moduleColor: '#000000',
-			anchorOuterColor: '#000000',
-			anchorInnerColor: '#000000',
+			modulesColor: '#000000',
+			anchorsOuterColor: '#000000',
+			anchorsInnerColor: '#000000',
 			shape: 'square',
 			errorCorrectionLevel: 'M',
 			join: false,
@@ -1225,7 +1225,7 @@ class QRCode {
 
 		const BACKGROUND_RECT = `<rect x="0" y="0" width="${WIDTH}" height="${HEIGHT}" style="fill:${this.options.backgroundColor};shape-rendering:crispEdges;"/>`;
 
-		let moduleSvgData = '';
+		let modulesSvgData = '';
 
 		let anchorsSvgData = '';
 
@@ -1239,7 +1239,7 @@ class QRCode {
 					let py: number | string = y * Y_SIZE + this.options.padding * Y_SIZE;
 
 					if (JOIN) {
-						// Module as a part of svg path data, thanks to @danioso
+						// Modules as a part of svg path data, thanks to @danioso
 						let w: number | string = X_SIZE + px;
 						let h: number | string = Y_SIZE + py;
 
@@ -1252,11 +1252,11 @@ class QRCode {
 					} else {
 						if (!this.isAnchor(x, y, LENGTH)) {
 							if (this.options.shape !== 'square') {
-								// Module as circle element
-								moduleSvgData += `<circle class="module" cx="${px + X_SIZE / 2}" cy="${py + Y_SIZE / 2}" r="${Math.min(X_SIZE, Y_SIZE) / 2}" style="fill:${this.options.moduleColor};"/>`;
+								// Modules as circle element
+								modulesSvgData += `<circle class="module" cx="${px + X_SIZE / 2}" cy="${py + Y_SIZE / 2}" r="${Math.min(X_SIZE, Y_SIZE) / 2}" style="fill:${this.options.modulesColor};"/>`;
 							} else {
-								// Module as rectangle element
-								moduleSvgData += `<rect class="module" x="${px}" y="${py}" width="${X_SIZE}" height="${Y_SIZE}" style="fill:${this.options.moduleColor};shape-rendering:crispEdges;"/>`;
+								// Modules as rectangle element
+								modulesSvgData += `<rect class="module" x="${px}" y="${py}" width="${X_SIZE}" height="${Y_SIZE}" style="fill:${this.options.modulesColor};shape-rendering:crispEdges;"/>`;
 							}
 						}
 					}
@@ -1265,7 +1265,8 @@ class QRCode {
 		}
 
 		if (JOIN) {
-			moduleSvgData = `<path x="0" y="0" style="fill:${this.options.moduleColor};shape-rendering:crispEdges;" d="${pathSvgData}" />`;
+			// Anchors included in the path data when join is true
+			modulesSvgData = `<path x="0" y="0" style="fill:${this.options.modulesColor};shape-rendering:crispEdges;" d="${pathSvgData}" />`;
 		} else {
 			const ANCHORS = [
 				['top-left', this.options.padding, this.options.padding],
@@ -1283,8 +1284,8 @@ class QRCode {
 					} ${Number(y)}h6s0.5 0 .5 .5v6s0 .5-.5 .5h-6s-.5 0-.5-.5v-6s0-.5 .5-.5zm.75 1s-.25 0-.25 .25v4.5s0 .25 .25 .25h4.5s.25 0 .25-.25v-4.5s0-.25 -.25 -.25h-4.5z`;
 					innerPath = `M${Number(x) + 2.5} ${Number(y) + 2} h2 s.5 0 .5 .5 v2 s0 .5-.5 .5 h-2 s-.5 0-.5-.5 v-2 s0-.5 .5-.5 z`;
 				}
-				const OUTER_ANCHOR = `<path class="anchor-outer" fill="${this.options.anchorOuterColor}" transform="scale(${X_SIZE}, ${Y_SIZE})" d="${outerPath}" />`;
-				const INNER_ANCHOR = `<path class="anchor-inner" fill="${this.options.anchorInnerColor}" transform="scale(${X_SIZE}, ${Y_SIZE})" d="${innerPath}" />`;
+				const OUTER_ANCHOR = `<path class="anchor-outer" fill="${this.options.anchorsOuterColor}" transform="scale(${X_SIZE}, ${Y_SIZE})" d="${outerPath}" />`;
+				const INNER_ANCHOR = `<path class="anchor-inner" fill="${this.options.anchorsInnerColor}" transform="scale(${X_SIZE}, ${Y_SIZE})" d="${innerPath}" />`;
 
 				anchorsSvgData += `<g data-position="${position}" ${this.options.shape !== 'square' ? '' : 'style="shape-rendering:crispEdges;"'}>${OUTER_ANCHOR} ${INNER_ANCHOR}</g>`;
 			}
@@ -1295,17 +1296,17 @@ class QRCode {
 		let svg = '';
 		switch (this.options.container) {
 			case 'svg':
-				svg = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="${WIDTH}" height="${HEIGHT}">${BACKGROUND_RECT}${anchorsSvgData}${moduleSvgData}</svg>`;
+				svg = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="${WIDTH}" height="${HEIGHT}">${BACKGROUND_RECT}${anchorsSvgData}${modulesSvgData}</svg>`;
 				break;
 
 			// Viewbox for responsive use in a browser, thanks to @danioso
 			case 'svg-viewbox':
-				svg = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ${WIDTH} ${HEIGHT}">${BACKGROUND_RECT}${anchorsSvgData}${moduleSvgData}</svg>`;
+				svg = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ${WIDTH} ${HEIGHT}">${BACKGROUND_RECT}${anchorsSvgData}${modulesSvgData}</svg>`;
 				break;
 
 			// Without a container
 			default:
-				svg = BACKGROUND_RECT + anchorsSvgData + moduleSvgData;
+				svg = BACKGROUND_RECT + anchorsSvgData + modulesSvgData;
 				break;
 		}
 

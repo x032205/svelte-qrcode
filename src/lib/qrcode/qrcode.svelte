@@ -52,9 +52,9 @@
 
 	export let backgroundColor = '#ffffff'; // Background color of the QR code
 	export let color = '#000000'; // General color of the QR code
-	export let moduleColor = color; // Module color of the QR code
-	export let anchorOuterColor = moduleColor; // Outer anchor color of the QR code
-	export let anchorInnerColor = anchorOuterColor; // Inner anchor color of the QR code
+	export let modulesColor = color; // Modules color of the QR code
+	export let anchorsOuterColor = modulesColor; // Outer anchors color of the QR code
+	export let anchorsInnerColor = anchorsOuterColor; // Inner anchors color of the QR code
 
 	export let shape: 'square' | 'circle' = 'square'; // Shape of the QR code
 
@@ -86,9 +86,9 @@
 		data,
 		typeNumber,
 		backgroundColor,
-		anchorOuterColor,
-		anchorInnerColor,
-		moduleColor,
+		anchorsOuterColor,
+		anchorsInnerColor,
+		modulesColor,
 		shape,
 		errorCorrectionLevel,
 		join: isJoin,
@@ -218,9 +218,9 @@
 
 @param backgroundColor (string) Background color of the QR code. Default is '#ffffff'
 @param color (string) General color of the QR code. Default is '#000000'
-@param moduleColor (string) Module color of the QR code. Default is the same as the `color` property
-@param anchorOuterColor (string) Outer anchor color of the QR code. Default is the same as the `moduleColor` property
-@param anchorInnerColor (string) Inner anchor color of the QR code. Default is the same as the `anchorOuterColor` property
+@param modulesColor (string) Modules color of the QR code. Default is the same as the `color` property
+@param anchorsOuterColor (string) Outer anchors color of the QR code. Default is the same as the `modulesColor` property
+@param anchorsInnerColor (string) Inner anchors color of the QR code. Default is the same as the `anchorsOuterColor` property
 
 &nbsp;
 

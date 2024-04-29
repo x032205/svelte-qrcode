@@ -117,9 +117,9 @@
 
 	<QRCode data="https://duxreserve.com" backgroundColor="#000000" color="#ffffff" />
 
-	<QRCode data="https://duxreserve.com" anchorOuterColor="#00ff00" anchorInnerColor="blue" />
+	<QRCode data="https://duxreserve.com" anchorsOuterColor="#00ff00" anchorsInnerColor="blue" />
 
-	<QRCode data="https://duxreserve.com" backgroundColor="yellow" moduleColor="red" anchorInnerColor="green" />
+	<QRCode data="https://duxreserve.com" backgroundColor="yellow" modulesColor="red" anchorsInnerColor="green" />
 </div>
 
 <h2>Shape</h2>
@@ -269,9 +269,9 @@
 	<QRCode
 		data="https://duxreserve.com"
 		backgroundColor="yellow"
-		moduleColor="red"
-		anchorOuterColor="green"
-		anchorInnerColor="orange"
+		modulesColor="red"
+		anchorsOuterColor="green"
+		anchorsInnerColor="orange"
 		logoPath="/logo/lightning.svg"
 		logoBackgroundColor="blue"
 		dispatchDownloadLink
