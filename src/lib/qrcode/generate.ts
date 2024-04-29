@@ -61,7 +61,7 @@ interface Options {
 	height: number; // Height dimension in pixels of the QR code
 	join: boolean; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
 	typeNumber:
-		| 0
+		| 0 // Auto detection
 		| 1
 		| 2
 		| 3

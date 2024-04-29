@@ -51,7 +51,7 @@
 		| 40 = 0; // QR code Type number (1 ~ 40), or 0 for auto detection
 
 	export let backgroundColor = '#ffffff'; // Background color of the QR code
-	export let color = '#000000'; // General color of the QR code
+	export let color = '#000000'; // Modules and anchors color of the QR code. Will be applied to `modulesColor`, `anchorsOuterColor`, and `anchorsInnerColor` properties if they are not defined
 	export let modulesColor = color; // Modules color of the QR code
 	export let anchorsOuterColor = modulesColor; // Outer anchors color of the QR code
 	export let anchorsInnerColor = anchorsOuterColor; // Inner anchors color of the QR code
@@ -107,7 +107,29 @@
 	// Otherwise, it will be visible after the logo has been loaded if `waitForLogo` is set to true
 	let qrCodeIsVisible: boolean = Boolean(logoInBase64) || !waitForLogo;
 
-	let qrCode: QRCode = new QRCode(OPTIONS);
+	const getQrCodeSvg = (regenerationWithLogo = false): string => {
+		try {
+			const QR_CODE: QRCode = new QRCode(OPTIONS);
+
+			if (regenerationWithLogo) {
+				// Can be useful to know when the QR Code has been regenerated with the logo
+				dispatch('qrCodeRegeneratedWithLogo');
+			} else {
+				// Can be useful to know when the QR Code has been generated
+				dispatch('qrCodeGenerated');
+			}
+
+			return QR_CODE.svg();
+		} catch (error) {
+			console.error('getQrCodeSvg: Failed to generate the QR code:', error);
+
+			dispatch('qrCodeGenerationFailed');
+
+			return '';
+		}
+	};
+
+	let qrCode: string = getQrCodeSvg();
 
 	const convertLogoToBase64 = async (path: string): Promise<string> => {
 		// Convert the logo image to base64 to be used in the QR Code
@@ -193,13 +215,13 @@
 			// Reload the QR Code with logo included from the logoPath
 			OPTIONS.logoInBase64 = await convertLogoToBase64(logoPath);
 
-			qrCode = new QRCode(OPTIONS);
+			qrCode = getQrCodeSvg(true);
 		}
 
 		qrCodeIsVisible = true;
 
-		if (dispatchDownloadLink && qrCode.svg() != null) {
-			convertQrCodeToFileFormat(qrCode.svg());
+		if (dispatchDownloadLink && qrCode) {
+			convertQrCodeToFileFormat(qrCode);
 		}
 	});
 </script>
@@ -217,7 +239,7 @@
 &nbsp;
 
 @param backgroundColor (string) Background color of the QR code. Default is '#ffffff'
-@param color (string) General color of the QR code. Default is '#000000'
+@param color (string) Modules and anchors color of the QR code.  Will be applied to `modulesColor`, `anchorsOuterColor`, and `anchorsInnerColor` properties if they are not defined. Default is '#000000'
 @param modulesColor (string) Modules color of the QR code. Default is the same as the `color` property
 @param anchorsOuterColor (string) Outer anchors color of the QR code. Default is the same as the `modulesColor` property
 @param anchorsInnerColor (string) Inner anchors color of the QR code. Default is the same as the `anchorsOuterColor` property
@@ -264,6 +286,9 @@
 &nbsp;
 &nbsp;
 
+@dispatch qrCodeGenerated (void) The QR Code is successfully generated
+@dispatch qrCodeRegeneratedWithLogo (void) The QR Code is successfully regenerated with the logo
+@dispatch qrCodeGenerationFailed (void) The QR Code generation failed
 @dispatch downloadLinkGenerated (string) The download link for the QR Code is generated and dispatched to the parent component if the `dispatchDownloadLink` property is set to true
 
 &nbsp;
@@ -271,5 +296,5 @@
 -->
 
 {#if qrCodeIsVisible}
-	{@html qrCode.svg()}
+	{@html qrCode}
 {/if}
