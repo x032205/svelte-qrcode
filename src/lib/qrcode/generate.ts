@@ -48,19 +48,60 @@
 //---------------------------------------------------------------------
 
 interface Options {
-	data: string; // Data of the QR code
+	data: string; // Data of the QR code to be encoded
 	backgroundColor: string; // Background color of the QR code
-	anchorOuterColor: string; // Inner color of QR anchors
+	anchorOuterColor: string; // Outer color of QR anchors
 	anchorInnerColor: string; // Inner color of QR anchors
 	moduleColor: string; // Color for QR modules
-	shape: string; // Shape of the QR code squares
-	errorCorrectionLevel: string; // Error correction level
-	container?: string;
+	shape: 'square' | 'circle'; // Shape of the QR code modules and anchors
+	errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H'; // Error correction level
+	container?: string; // Container element to render the QR code
 	padding: number; // Padding around the QR code
 	width: number; // Width dimension in pixels of the QR code
 	height: number; // Height dimension in pixels of the QR code
 	join: boolean; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
-	typeNumber: number; // Type number (1 ~ 40), or 0 for auto detection
+	typeNumber:
+		| 0
+		| 1
+		| 2
+		| 3
+		| 4
+		| 5
+		| 6
+		| 7
+		| 8
+		| 9
+		| 10
+		| 11
+		| 12
+		| 13
+		| 14
+		| 15
+		| 16
+		| 17
+		| 18
+		| 19
+		| 20
+		| 21
+		| 22
+		| 23
+		| 24
+		| 25
+		| 26
+		| 27
+		| 28
+		| 29
+		| 30
+		| 31
+		| 32
+		| 33
+		| 34
+		| 35
+		| 36
+		| 37
+		| 38
+		| 39
+		| 40; // Type number (1 ~ 40), or 0 for auto detection
 	logoInBase64?: string; // Base64 image to be used as a logo in the center of the QR code
 	logoBackgroundColor?: string; // Background color of the logo
 	logoPadding?: number; // Padding around the logo
@@ -1173,16 +1214,21 @@ class QRCode {
 	public svg(): string {
 		const WIDTH = this.options.width;
 		const HEIGHT = this.options.height;
+
 		const MODULES = this.qrCodeModel.modules;
 		const LENGTH = MODULES.length;
+
 		const X_SIZE = WIDTH / (LENGTH + 2 * this.options.padding);
 		const Y_SIZE = HEIGHT / (LENGTH + 2 * this.options.padding);
+
 		const JOIN = this.options.join;
 
 		const BACKGROUND_RECT = `<rect x="0" y="0" width="${WIDTH}" height="${HEIGHT}" style="fill:${this.options.backgroundColor};shape-rendering:crispEdges;"/>`;
 
 		let moduleSvgData = '';
+
 		let anchorsSvgData = '';
+
 		let pathSvgData = '';
 
 		for (let y = 0; y < LENGTH; y++) {
@@ -1239,6 +1285,7 @@ class QRCode {
 				}
 				const OUTER_ANCHOR = `<path class="anchor-outer" fill="${this.options.anchorOuterColor}" transform="scale(${X_SIZE}, ${Y_SIZE})" d="${outerPath}" />`;
 				const INNER_ANCHOR = `<path class="anchor-inner" fill="${this.options.anchorInnerColor}" transform="scale(${X_SIZE}, ${Y_SIZE})" d="${innerPath}" />`;
+
 				anchorsSvgData += `<g data-position="${position}" ${this.options.shape !== 'square' ? '' : 'style="shape-rendering:crispEdges;"'}>${OUTER_ANCHOR} ${INNER_ANCHOR}</g>`;
 			}
 
@@ -1272,9 +1319,8 @@ class QRCode {
 			const LOGO_PADDING = this.options.logoPadding || 5;
 			const LOGO_BACKGROUND_COLOR = this.options.logoBackgroundColor || this.options.backgroundColor;
 
-			// Center the logo
 			const LOGO_X = QR_CODE_WIDTH_SIZE / 2 - LOGO_WIDTH / 2;
-			const LOGO_Y = QR_CODE_HEIGHT_SIZE / 2 - LOGO_WIDTH / 2;
+			const LOGO_Y = QR_CODE_HEIGHT_SIZE / 2 - LOGO_WIDTH / 2; // Center the logo
 			const LOGO_BACKGROUND_X = QR_CODE_WIDTH_SIZE / 2 - LOGO_WIDTH / 2 - LOGO_PADDING;
 			const LOGO_BACKGROUND_Y = QR_CODE_HEIGHT_SIZE / 2 - LOGO_HEIGHT / 2 - LOGO_PADDING;
 			const LOGO_BACKGROUND_WIDTH = LOGO_WIDTH + LOGO_PADDING * 2;
@@ -1284,6 +1330,7 @@ class QRCode {
 			const LOGO = `<image href="${this.options.logoInBase64}" x="${LOGO_X}" y="${LOGO_Y}" width="${LOGO_WIDTH}" height="${LOGO_WIDTH}" preserveAspectRatio="xMidYMid meet"/>`;
 
 			const CLOSING_TAG_POS = svg.lastIndexOf('</svg>');
+
 			svg = svg.substring(0, CLOSING_TAG_POS) + LOGO_BACKGROUND_RECT + LOGO + svg.substring(CLOSING_TAG_POS);
 		}
 

@@ -61,7 +61,7 @@
 
 <h1>Bitcoin address</h1>
 
-<strong>Not ours, just random address for testing purposes</strong>
+<strong>Not mine, just random address for testing purposes</strong>
 
 <div>
 	<!-- Genesis block address: -->
