@@ -76,7 +76,7 @@ The QR code type number, an integer ranging from 1 to 40, determines the QR code
 
 QR Code has error correction capability to restore data if the code is dirty or damaged. Four error correction levels are available to choose according to the operating environment. Raising this level improves error correction capability but also increases the amount of data QR Code size and reduces the QR code's data capacity.
 
-To select error correction level, various factors such as the operating environment and QR Code size need to be considered. Level `Q` or `H` may be selected for factory environment where QR Code get dirty, whereas Level `L` may be selected for a clean environment with the large amount of data. Typically, Level `M` (15%) is most frequently selected.
+To select error correction level, various factors such as the operating environment and QR Code size need to be considered. Level `Q` or `H` may be selected for factory environment where QR Code get dirty, whereas Level `L` may be selected for a clean environment with the large amount of data. Typically, level `M` (15%) is most frequently selected.
 
 - Level `L` Approx 7%
 - Level `M` Approx 15% (default value)
@@ -172,7 +172,7 @@ If `isResponsive` set to `true`, the QR code will be responsive and adapt to the
 
 You can adjust the padding and size of the QR code. Increasing the size enhances the ease of scanning.
 
-The padding is measured in "module units", while the size is in pixels.
+The `padding` is measured in "module units", while the `size`, `width` and `height` are in pixels.
 
 **Note:** It's recommended to use a square-like QR code if you prefer different `width` and `height` values. Test the QR code with different sizes to ensure it is scannable.
 
@@ -240,11 +240,16 @@ If you don't set `logoBackgroundColor`, the logo will have the same background c
 
 ### Downloading the QR Code
 
-You can download the QR code as file (`'svg'` | `'png'` | `'jpg'` | `'jpeg'` | `'webp'`) by using an anchor tag that initiates the download. To enable this functionality, set the `dispatchDownloadLink` property to `true` and listen for the `downloadLinkGenerated` event to retrieve the download URL.
+You can download the QR code as a file (`'svg'` | `'png'` | `'jpg'` | `'jpeg'` | `'webp'`) by using an anchor tag that initiates the download. To enable this functionality, set the `dispatchDownloadLink` property to `true` and listen for the `downloadLinkGenerated` event to retrieve the download URL. You can choose the file format by setting the `downloadLinkFileFormat` property to `'svg'` (default), `'png'`, `'jpg'`, `'jpeg'`, or `'webp'`.
 
 Add the `download` attribute to the anchor tag to specify the filename for the downloaded file. The extension is optional in the file name; the file format will be determined by the `downloadLinkFileFormat` property.
 
 Additionally, include the `target="_blank"` attribute in the anchor tag to open the download in a new tab.
+
+| Property name            | Type                                          | Default value |
+| ------------------------ | --------------------------------------------- | ------------- |
+| `dispatchDownloadLink`   | `boolean`                                     | `false`       |
+| `downloadLinkFileFormat` | `'svg'`, `'png'`, `'jpg'`, `'jpeg'`, `'webp'` | `'svg'`       |
 
 ```svelte
 <script>
