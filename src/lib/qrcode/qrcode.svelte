@@ -5,47 +5,136 @@
 
 	import { QRCode } from './generate';
 
-	export let content = ''; // Content of the QR code
+	export let data = ''; // Data of the QR code to be encoded
 
-	export let backgroundColor = '#ffffff'; // Hexadecimal color code or 'transparent'
-	export let color = '#000000'; // Hexadecimal color code
-	export let errorCorrection = 'M'; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
-	export let isResponsive = false; // If set to true, the QR code will be responsive
-	export let padding = 4; // Padding around the QR code in pixels
-	export let size = 150; // Size of the QR code in pixels
+	export let typeNumber:
+		| 0 // Auto detection
+		| 1
+		| 2
+		| 3
+		| 4
+		| 5
+		| 6
+		| 7
+		| 8
+		| 9
+		| 10
+		| 11
+		| 12
+		| 13
+		| 14
+		| 15
+		| 16
+		| 17
+		| 18
+		| 19
+		| 20
+		| 21
+		| 22
+		| 23
+		| 24
+		| 25
+		| 26
+		| 27
+		| 28
+		| 29
+		| 30
+		| 31
+		| 32
+		| 33
+		| 34
+		| 35
+		| 36
+		| 37
+		| 38
+		| 39
+		| 40 = 0; // QR code Type number (1 ~ 40), or 0 for auto detection
 
-	export let base64Image = ''; // base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times
+	export let errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H' = 'M'; // Error correction level
+
+	export let backgroundColor = '#ffffff'; // Background color of the QR code
+	export let color = '#000000'; // Modules and anchors color of the QR code. Will be applied to `modulesColor`, `anchorsOuterColor`, and `anchorsInnerColor` properties if they are not defined
+	export let modulesColor = color; // Modules color of the QR code
+	export let anchorsOuterColor = modulesColor; // Outer anchors color of the QR code
+	export let anchorsInnerColor = anchorsOuterColor; // Inner anchors color of the QR code
+
+	export let shape: 'square' | 'circle' = 'square'; // Shape of the QR code
+
+	export let isJoin = false; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
+	export let isResponsive = false; // If set to true, the QR code will be responsive and adapt to the available space in its parent element
+
+	export let padding = 1; // Padding around the QR code
+	export let size = 256; // Width and height dimensions in pixels of the QR code
+	export let width = size; // Width dimension in pixels of the QR code
+	export let height = size; // Height dimension in pixels of the QR code
+
+	export let logoInBase64 = ''; // base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times
 	export let logoPath = ''; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. Typically, the logo file is located in the static folder
-	export let logoBackgroundColor = ''; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
-	export let logoPadding = 4; // Padding around the logo in pixels
-	export let logoWidth = 15; // Size of the logo in percentage relative to the QR code width
+	export let logoBackgroundColor = ''; // Color the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code `backgroundColor` property
+	export let logoPadding = 5; // Padding around the logo
+	export let logoSize = 15; // Size of the logo in percentage relative to the QR code size
+	export let logoWidth = logoSize; // Width of the logo in percentage relative to the QR code width
+	export let logoHeight = logoSize; // Height of the logo in percentage relative to the QR code height
+	export let waitForLogo = false; // If set to true, the QR code will not render until the logo has fully loaded
 
 	export let dispatchDownloadLink = false; // If set to true, a download link will be generated for the QR code and dispatched to the parent component
+	export let downloadLinkFileFormat: 'svg' | 'png' | 'jpg' | 'jpeg' | 'webp' = 'svg'; // The file format of the download link
 
 	const dispatch = createEventDispatcher();
 
 	const OPTIONS: Options = {
-		content,
-		background: backgroundColor,
-		color,
-		ecl: errorCorrection,
+		data,
+		typeNumber,
+		errorCorrectionLevel,
+		backgroundColor,
+		modulesColor,
+		anchorsOuterColor,
+		anchorsInnerColor,
+		shape,
+		join: isJoin,
 		container: isResponsive ? 'svg-viewbox' : 'svg',
 		padding,
-		width: size,
-		height: size,
-		join: true,
-		typeNumber: 4,
-		base64Image,
+		width,
+		height,
+		logoInBase64,
 		logoBackgroundColor,
 		logoPadding,
 		logoWidth,
+		logoHeight,
 	};
 
-	let qrCode: QRCode = new QRCode(OPTIONS);
+	// If the logo is not defined, the QR code will be visible immediately
+	// Otherwise, it will be visible after the logo has been loaded if `waitForLogo` is set to true or if the logo is already in base64 with `logoInBase64`
+	let qrCodeIsVisible: boolean = Boolean(logoInBase64) || !waitForLogo;
 
-	const convertImageToBase64 = async (filePath: string): Promise<string> => {
+	const getQrCodeSvg = (regenerationWithLogo = false): string => {
 		try {
-			const RESPONSE = await fetch(filePath);
+			const QR_CODE: QRCode = new QRCode(OPTIONS);
+
+			if (regenerationWithLogo) {
+				// Can be useful to know when the QR Code has been regenerated with the logo
+				dispatch('qrCodeRegeneratedWithLogo');
+			} else {
+				// Can be useful to know when the QR Code has been generated
+				dispatch('qrCodeGenerated');
+			}
+
+			return QR_CODE.svg();
+		} catch (error) {
+			console.error('getQrCodeSvg: Failed to generate the QR code:', error);
+
+			dispatch('qrCodeGenerationFailed');
+
+			return '';
+		}
+	};
+
+	let qrCode: string = getQrCodeSvg();
+
+	const convertLogoToBase64 = async (path: string): Promise<string> => {
+		// Convert the logo image to base64 to be used in the QR Code
+		try {
+			const RESPONSE = await fetch(path);
 
 			if (!RESPONSE.ok) {
 				throw new Error('Failed to fetch the logo image');
@@ -63,66 +152,149 @@
 				READER.readAsDataURL(LOGO_BLOB);
 			});
 		} catch (error) {
-			console.error('Failed to convert logo to base64:', error);
+			console.error('convertImageToBase64: Failed to convert logo to base64:', error);
 
 			return '';
 		}
 	};
 
-	onMount(async () => {
-		if (!base64Image && logoPath) {
-			// Reload the QR Code with logo included from the logoPath
-			OPTIONS.base64Image = await convertImageToBase64(logoPath);
+	const convertQrCodeToFileFormat = (qrCodeSvg: string): void => {
+		// Create a Blob from the SVG data
+		const QR_CODE_BLOB = new Blob([qrCodeSvg], { type: 'image/svg+xml' });
 
-			qrCode = new QRCode(OPTIONS);
-		}
+		const QR_CODE_URL = URL.createObjectURL(QR_CODE_BLOB);
 
-		if (dispatchDownloadLink && qrCode.svg() != null) {
-			const QR_CODE_BLOB: Blob = new Blob([qrCode.svg()], { type: 'image/svg+xml' });
-
-			const QR_CODE_URL: string = URL.createObjectURL(QR_CODE_BLOB);
-
+		if (downloadLinkFileFormat === 'svg') {
+			// Dispatch the download link for the SVG file without converting it
 			dispatch('downloadLinkGenerated', {
 				url: QR_CODE_URL,
 			});
+		} else {
+			// Load and convert the SVG file to the specified file format
+			const IMAGE = new Image();
+
+			IMAGE.onload = () => {
+				// Create a canvas and draw the image onto it
+				const CANVAS = document.createElement('canvas');
+
+				CANVAS.width = IMAGE.width;
+				CANVAS.height = IMAGE.height;
+
+				const CTX = CANVAS.getContext('2d');
+
+				if (CTX) {
+					CTX.drawImage(IMAGE, 0, 0);
+
+					const FILE_FORMAT =
+						{
+							png: 'image/png',
+							jpg: 'image/jpeg',
+							jpeg: 'image/jpeg',
+							webp: 'image/webp',
+						}[downloadLinkFileFormat] || 'image/png';
+
+					// Convert canvas to the desired file format
+					const CONVERTED_FILE_URL = CANVAS.toDataURL(FILE_FORMAT);
+
+					dispatch('downloadLinkGenerated', {
+						url: CONVERTED_FILE_URL,
+					});
+				}
+			};
+
+			IMAGE.onerror = () => {
+				console.error('convertQrCodeToFileFormat: Error loading or converting the image');
+			};
+
+			IMAGE.src = QR_CODE_URL;
+		}
+	};
+
+	onMount(async () => {
+		if (!logoInBase64 && logoPath) {
+			// Reload the QR Code with logo included from the logoPath
+			OPTIONS.logoInBase64 = await convertLogoToBase64(logoPath);
+
+			qrCode = getQrCodeSvg(true);
+		}
+
+		qrCodeIsVisible = true;
+
+		if (dispatchDownloadLink && qrCode) {
+			convertQrCodeToFileFormat(qrCode);
 		}
 	});
 </script>
 
 <!--
 @component
-### QR Code
+### QR Code Generator Component
 
-@param content (string) The content of the QR Code to be encoded
-
-&nbsp;
-
-@param backgroundColor (string) The background color of the QR Code in hexadecimal format or 'transparent'. Default is '#ffffff'
-@param color (string) The color of the QR Code in hexadecimal format. Default is '#000000'
-@param errorCorrection (string) The error correction level of the QR Code. Possible values: 'L', 'M', 'Q', 'H'. Default is 'M'
-@param isResponsive (boolean) With the responsive settings enabled, the size settings will only be used in the code calculation
-and the container will adapt and use all available space in its parent element. Default is true
-@param padding (number) Padding around the QR Code. Default is 4 pixels
-@param size (number) The size of the QR Code in pixels. Default is 150 pixels
+@param data (string) Data of the QR code to be encoded. **Required to generate the QR Code**
 
 &nbsp;
 
-@param base64Image (string) base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times.
-There is no validation of the base64 encoding; ensure it is valid. Default is '' (no logo)
-@param logoPath (string) The path to the logo file to be added to the center of the QR Code. Default is '' (no logo).
-**Note:** With the logo, it is recommended to have a minimum error correction level of 'M' to ensure the QR Code is readable
-@param logoBackgroundColor (string) The background color of the logo in hexadecimal format or 'transparent'. Default is '' (same as the QR Code backgroundColor property)
-@param logoPadding (number) Padding around the logo in pixels. Default is 4 pixels
-@param logoWidth (number) The size of the logo in percentage relative to the QR Code width. Default is 15%
+@param typeNumber (number) QR code type number (1 ~ 40), or 0 for auto detection. Default is `0`
 
 &nbsp;
 
-@param dispatchDownloadLink (boolean) If set to true, a download link will be generated for the QR Code and dispatched to the parent component. Default is false
+@param errorCorrectionLevel (string) Error correction level of the QR Code. Possible values: `'L'`, `'M'`, `'Q'`, `'H'`. Default is `'M'`
+
+&nbsp;
+
+@param backgroundColor (string) Background color of the QR code. Default is `'#ffffff'`
+@param color (string) Modules and anchors color of the QR code.  Will be applied to `modulesColor`, `anchorsOuterColor`, and `anchorsInnerColor` properties if they are not defined. Default is `'#000000'`
+@param modulesColor (string) Modules color of the QR code. Default is the same as the `color` property
+@param anchorsOuterColor (string) Outer anchors color of the QR code. Default is the same as the `modulesColor` property
+@param anchorsInnerColor (string) Inner anchors color of the QR code. Default is the same as the `anchorsOuterColor` property
+
+&nbsp;
+
+@param shape (string) Shape of the QR code. Possible values: `'square'`, `'circle'`. Default is `'square'`
+
+&nbsp;
+
+@param isJoin (boolean) // If `isJoin` is set to `true`, the QR code will be generated as a single SVG element. If set to `false`, each square will be an individual SVG element. Default is `false`
+**Note:** The `isJoin` property is useful for performance optimization, especially when generating a large number of QR codes. However, the colors of the anchors and modules will not differ, and the shape can only be `'square'` when `isJoin` is set to `true`
+@param isResponsive (boolean) If set to `true`, the QR code will be responsive and adapt to the available space in its parent element
+
+&nbsp;
+
+@param padding (number) Padding around the QR code. Default is `1`
+@param size (number) Width and height dimensions in pixels of the QR code. Default is `256` pixels
+@param width (number) The width of the QR Code in pixels. Default is the same as the `size` property
+@param height (number) The height of the QR Code in pixels. Default is the same as the `size` property
+
+&nbsp;
+
+@param logoInBase64 (string) base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times.
+**Note:** There is no validation of the base64 encoding; ensure it is valid. Default is `''` (no logo)
+@param logoPath (string) The path to the logo file to be added to the center of the QR Code. Default is `''` (no logo).
+**Note:** With the logo, it is recommended to have a minimum error correction level of `'M'` to ensure the QR Code is readable
+@param logoBackgroundColor (string) Color the logo background. Default is `''` (same as the QR Code `backgroundColor` property)
+@param logoPadding (number) Padding around the logo. Default is `5`
+@param logoSize (number) Size of the logo in percentage relative to the QR code size. Default is `15`%
+@param logoWidth (number) Width of the logo in percentage relative to the QR code width. Default is the same as the `logoSize` property
+@param logoHeight (number) Height of the logo in percentage relative to the QR code height. Default is the same as the `logoSize` property
+@param waitForLogo (boolean) If set to `true`, the QR code will not render until the logo has fully loaded. Default is `false`
+
+&nbsp;
+
+@param dispatchDownloadLink (boolean) If set to `true`, a download link will be generated for the QR code and dispatched to the parent component. Default is `false`
+@param downloadLinkFileFormat (string) The file format of the download link. Possible values: `'svg'`, `'png'`, `'jpg'`, `'jpeg'`, `'webp'`. Default is `'svg'`
 
 &nbsp;
 &nbsp;
 
-@dispatch downloadLinkGenerated (string) The download link for the QR Code is generated and dispatched to the parent component if the `dispatchDownloadLink` property is set to true
+@dispatch qrCodeGenerated (void) The QR Code is successfully generated
+@dispatch qrCodeRegeneratedWithLogo (void) The QR Code is successfully regenerated with the logo
+@dispatch qrCodeGenerationFailed (void) The QR Code generation failed. Check the console for more information
+@dispatch downloadLinkGenerated (string) The download link for the QR Code is generated and dispatched to the parent component if the `dispatchDownloadLink` property is set to `true`
+
+&nbsp;
+
 -->
 
-{@html qrCode.svg()}
+{#if qrCodeIsVisible}
+	{@html qrCode}
+{/if}
