@@ -256,7 +256,7 @@
 	<a href={downloadUrl} download="QR-code-filename" target="_blank">Download QR Code</a>
 {/if}
 
-<h2>With download link generated for not join</h2>
+<h2>With download link generated for join</h2>
 <div>
 	<QRCode
 		data="https://duxreserve.com"
