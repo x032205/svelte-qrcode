@@ -17,7 +17,7 @@
  * @version 1.1.0 (2023-09-04)
  * @editor Alexandre Castlenine
  *
- * - Code formated
+ * - Code formatted
  * - Converted to TypeScript
  * - Replaced prototypes with class
  * - Code still has no dependencies
@@ -30,8 +30,10 @@
  * @version 2.0.0 (2024-04-29)
  * @editor Alexandre Castlenine
  *
+ * - Rename some properties to make them more explicit (follow the migration guide to learn more)
  * - Added anchorOuterColor and anchorInnerColor properties
  * - Added shape property
+ * - Code refactored to use template literals
  *
  */
 
@@ -47,22 +49,23 @@
 
 interface Options {
 	data: string; // Data of the QR code
-	backgroundColor: string; // Hexadecimal color code or 'transparent'
-	anchorOuterColor: string; // Inner color of anchors
-	anchorInnerColor: string; // Inner color of anchors
-	moduleColor: string; // Color for regular modules
+	backgroundColor: string; // Background color of the QR code
+	anchorOuterColor: string; // Inner color of QR anchors
+	anchorInnerColor: string; // Inner color of QR anchors
+	moduleColor: string; // Color for QR modules
 	shape: string; // Shape of the QR code squares
-	errorCorrectionLevel: string; // Error correction level. Possible values are 'L', 'M', 'Q', 'H'
+	errorCorrectionLevel: string; // Error correction level
 	container?: string;
 	padding: number; // Padding around the QR code
 	width: number; // Width dimension in pixels of the QR code
 	height: number; // Height dimension in pixels of the QR code
-	join: boolean;
+	join: boolean; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
 	typeNumber: number; // Type number (1 ~ 40), or 0 for auto detection
-	logoInBase64?: string; // If it's an empty string (`''`), no logo will be added. Otherwise, the logo will be centered on the QR code. The logo can either be converted to a base64 format by the Svelte QR code component or directly provided as a base64 string
-	logoBackgroundColor?: string; // Hexadecimal color code or 'transparent' for the logo background. If it's an empty string (`''`), the background color for the logo will be the same as the QR code backgroundColor property
+	logoInBase64?: string; // Base64 image to be used as a logo in the center of the QR code
+	logoBackgroundColor?: string; // Background color of the logo
 	logoPadding?: number; // Padding around the logo
-	logoWidth?: number; // Size of the logo in percentage relative to the QR code width
+	logoWidth?: number; // Width of the logo in percentage relative to the QR code width
+	logoHeight?: number; // Height of the logo in percentage relative to the QR code height
 }
 
 const QR_CODE_LIMIT_LENGTH = [
@@ -344,7 +347,7 @@ class QRRSBlock {
 	public getRSBlocks(typeNumber: number, errorCorrectLevel: QRErrorCorrectLevel) {
 		const RS_BLOCK = this.getRsBlockTable(typeNumber, errorCorrectLevel);
 		if (RS_BLOCK == undefined) {
-			throw new Error('bad rs block @ typeNumber:' + typeNumber + '/errorCorrectLevel:' + errorCorrectLevel);
+			throw new Error(`bad rs block @ typeNumber:${typeNumber}/errorCorrectLevel:${errorCorrectLevel}`);
 		}
 		const LENGTH = RS_BLOCK.length / 3;
 		const LIST = [];
@@ -446,7 +449,7 @@ class QRMath {
 
 	public glog(n: number) {
 		if (n < 1) {
-			throw new Error('glog(' + n + ')');
+			throw new Error(`glog(${n})`);
 		}
 		return this.LOG_TABLE[n];
 	}
@@ -468,7 +471,7 @@ class QRPolynomial {
 
 	public constructor(num: number[], shift: number) {
 		if (num.length == undefined) {
-			throw new Error(num.length + '/' + shift);
+			throw new Error(`num.length:undefined/${shift}`);
 		}
 		let offset = 0;
 		while (offset < num.length && num[offset] == 0) {
@@ -540,7 +543,7 @@ class QRCodeModel {
 
 	public isDark(row: number, col: number) {
 		if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
-			throw new Error(row + ',' + col);
+			throw new Error(`${row},${col}`);
 		}
 		return this.modules[row][col];
 	}
@@ -736,7 +739,7 @@ class QRCodeModel {
 			totalDataCount += RS_BLOCKS[i].dataCount;
 		}
 		if (BUFFER.getLengthInBits() > totalDataCount * 8) {
-			throw new Error('code length overflow. (' + BUFFER.getLengthInBits() + '>' + totalDataCount * 8 + ')');
+			throw new Error(`code length overflow: (${BUFFER.getLengthInBits()} > ${totalDataCount * 8})`);
 		}
 		if (BUFFER.getLengthInBits() + 4 <= totalDataCount * 8) {
 			BUFFER.put(0, 4);
@@ -903,7 +906,7 @@ class QRUtil {
 			case QRMaskPattern.PATTERN111:
 				return (((i * j) % 3) + ((i + j) % 2)) % 2 == 0;
 			default:
-				throw new Error('bad maskPattern:' + maskPattern);
+				throw new Error('bad maskPattern: undefined');
 		}
 	}
 
@@ -928,7 +931,7 @@ class QRUtil {
 				case QRMode.MODE_KANJI:
 					return 8;
 				default:
-					throw new Error('mode:' + mode);
+					throw new Error('mode: undefined');
 			}
 		} else if (type < 27) {
 			switch (mode) {
@@ -941,7 +944,7 @@ class QRUtil {
 				case QRMode.MODE_KANJI:
 					return 10;
 				default:
-					throw new Error('mode:' + mode);
+					throw new Error('mode: undefined');
 			}
 		} else if (type < 41) {
 			switch (mode) {
@@ -954,10 +957,10 @@ class QRUtil {
 				case QRMode.MODE_KANJI:
 					return 12;
 				default:
-					throw new Error('mode:' + mode);
+					throw new Error('mode: undefined');
 			}
 		} else {
-			throw new Error('type:' + type);
+			throw new Error(`type: ${type}`);
 		}
 	}
 
@@ -1075,17 +1078,17 @@ class QRCode {
 		}
 
 		if (this.options.data.length === 0 || this.options.data.length > 7089) {
-			throw new Error("Expected 'data' to be non-empty and with a maximum of 6.92KB !");
+			throw new Error("Expected 'data' to be non-empty and with a maximum of 6.92KB!");
 		}
 		if (this.options.padding < 1) this.options.padding = 1;
 		if (this.options.width < 1) this.options.width = 256;
 		if (this.options.height < 1) this.options.height = 256;
 
-		const CONTENT = this.options.data;
-		const TYPE = this._getTypeNumber(CONTENT, this.options.errorCorrectionLevel);
+		const DATA = this.options.data;
+		const TYPE = this._getTypeNumber(DATA, this.options.errorCorrectionLevel);
 		const ERROR_CORRECTION_LEVEL = this._getErrorCorrectLevel(this.options.errorCorrectionLevel);
 		this.qrCodeModel = new QRCodeModel(TYPE, ERROR_CORRECTION_LEVEL);
-		this.qrCodeModel.addData(CONTENT);
+		this.qrCodeModel.addData(DATA);
 		this.qrCodeModel.make();
 	}
 
@@ -1104,7 +1107,7 @@ class QRCode {
 				return QRErrorCorrectLevel.H;
 
 			default:
-				throw new Error('Unknown error correction level: ' + errorCorrectionLevel);
+				throw new Error(`Unknown error correction level: ${errorCorrectionLevel}`);
 		}
 	}
 
@@ -1117,7 +1120,7 @@ class QRCode {
 		for (let i = 0, len = QR_CODE_LIMIT_LENGTH.length; i <= len; i++) {
 			const TABLE = QR_CODE_LIMIT_LENGTH[i];
 			if (!TABLE) {
-				throw new Error('Data too long: expected ' + limit + ' but got ' + LENGTH);
+				throw new Error(`Data too long: expected ${limit} but got ${LENGTH}`);
 			}
 
 			switch (errorCorrectionLevel.toUpperCase()) {
@@ -1138,7 +1141,7 @@ class QRCode {
 					break;
 
 				default:
-					throw new Error('Unknown error correction level: ' + errorCorrectionLevel);
+					throw new Error(`Unknown error correction level: ${errorCorrectionLevel}`);
 			}
 
 			if (LENGTH <= limit) {
@@ -1168,7 +1171,6 @@ class QRCode {
 	}
 
 	public svg(): string {
-		const EOL = '';
 		const WIDTH = this.options.width;
 		const HEIGHT = this.options.height;
 		const MODULES = this.qrCodeModel.modules;
@@ -1177,13 +1179,11 @@ class QRCode {
 		const Y_SIZE = HEIGHT / (LENGTH + 2 * this.options.padding);
 		const JOIN = this.options.join;
 
-		// TODO: use template literals
-		const BACKGROUND_RECT =
-			'<rect x="0" y="0" width="' + WIDTH + '" height="' + HEIGHT + '" style="fill:' + this.options.backgroundColor + ';shape-rendering:crispEdges;"/>' + EOL;
+		const BACKGROUND_RECT = `<rect x="0" y="0" width="${WIDTH}" height="${HEIGHT}" style="fill:${this.options.backgroundColor};shape-rendering:crispEdges;"/>`;
 
 		let moduleSvgData = '';
-		let anchorsSvg = '';
-		let pathData = '';
+		let anchorsSvgData = '';
+		let pathSvgData = '';
 
 		for (let y = 0; y < LENGTH; y++) {
 			for (let x = 0; x < LENGTH; x++) {
@@ -1193,7 +1193,7 @@ class QRCode {
 					let py: number | string = y * Y_SIZE + this.options.padding * Y_SIZE;
 
 					if (JOIN) {
-						//Module as a part of svg path data, thanks to @danioso
+						// Module as a part of svg path data, thanks to @danioso
 						let w: number | string = X_SIZE + px;
 						let h: number | string = Y_SIZE + py;
 
@@ -1202,38 +1202,15 @@ class QRCode {
 						w = Number.isInteger(w) ? Number(w) : w.toFixed(2);
 						h = Number.isInteger(h) ? Number(h) : h.toFixed(2);
 
-						pathData += 'M' + px + ',' + py + ' V' + h + ' H' + w + ' V' + py + ' H' + px + ' Z ';
+						pathSvgData += `M${px},${py} V${h} H${w} V${py} H${px} Z `;
 					} else {
 						if (!this.isAnchor(x, y, LENGTH)) {
 							if (this.options.shape !== 'square') {
 								// Module as circle element
-								moduleSvgData +=
-									'<circle class="modules" cx="' +
-									(px + X_SIZE / 2).toString() + // Set center x
-									'" cy="' +
-									(py + Y_SIZE / 2).toString() + // Set center y
-									'" r="' +
-									(Math.min(X_SIZE, Y_SIZE) / 2).toString() + // Set radius
-									'" style="fill:' +
-									this.options.moduleColor +
-									'rx="0.5"' +
-									';shape-rendering:crispEdges;"/>' +
-									EOL;
+								moduleSvgData += `<circle class="module" cx="${px + X_SIZE / 2}" cy="${py + Y_SIZE / 2}" r="${Math.min(X_SIZE, Y_SIZE) / 2}" style="fill:${this.options.moduleColor};"/>`;
 							} else {
 								// Module as rectangle element
-								moduleSvgData +=
-									'<rect x="' +
-									px.toString() +
-									'" y="' +
-									py.toString() +
-									'" width="' +
-									X_SIZE +
-									'" height="' +
-									Y_SIZE +
-									'" style="fill:' +
-									this.options.moduleColor +
-									';shape-rendering:crispEdges;"/>' +
-									EOL;
+								moduleSvgData += `<rect class="module" x="${px}" y="${py}" width="${X_SIZE}" height="${Y_SIZE}" style="fill:${this.options.moduleColor};shape-rendering:crispEdges;"/>`;
 							}
 						}
 					}
@@ -1242,7 +1219,7 @@ class QRCode {
 		}
 
 		if (JOIN) {
-			moduleSvgData = '<path x="0" y="0" style="fill:' + this.options.moduleColor + ';shape-rendering:crispEdges;" d="' + pathData + '" />';
+			moduleSvgData = `<path x="0" y="0" style="fill:${this.options.moduleColor};shape-rendering:crispEdges;" d="${pathSvgData}" />`;
 		} else {
 			const ANCHORS = [
 				['top-left', this.options.padding, this.options.padding],
@@ -1262,48 +1239,48 @@ class QRCode {
 				}
 				const OUTER_ANCHOR = `<path class="anchor-outer" fill="${this.options.anchorOuterColor}" transform="scale(${X_SIZE}, ${Y_SIZE})" d="${outerPath}" />`;
 				const INNER_ANCHOR = `<path class="anchor-inner" fill="${this.options.anchorInnerColor}" transform="scale(${X_SIZE}, ${Y_SIZE})" d="${innerPath}" />`;
-				anchorsSvg += `<g data-position="${position}">${OUTER_ANCHOR} ${INNER_ANCHOR}</g>`;
+				anchorsSvgData += `<g data-position="${position}" ${this.options.shape !== 'square' ? '' : 'style="shape-rendering:crispEdges;"'}>${OUTER_ANCHOR} ${INNER_ANCHOR}</g>`;
 			}
 
-			anchorsSvg = `<g class="anchors">${anchorsSvg}</g>`;
+			anchorsSvgData = `<g class="anchors">${anchorsSvgData}</g>`;
 		}
 
 		let svg = '';
 		switch (this.options.container) {
 			case 'svg':
-				svg += '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="' + WIDTH + '" height="' + HEIGHT + '">' + EOL;
-				svg += BACKGROUND_RECT + anchorsSvg + moduleSvgData;
-				svg += '</svg>';
+				svg = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="${WIDTH}" height="${HEIGHT}">${BACKGROUND_RECT}${anchorsSvgData}${moduleSvgData}</svg>`;
 				break;
 
-			//Viewbox for responsive use in a browser, thanks to @danioso
+			// Viewbox for responsive use in a browser, thanks to @danioso
 			case 'svg-viewbox':
-				svg += '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ' + WIDTH + ' ' + HEIGHT + '">' + EOL;
-				svg += BACKGROUND_RECT + anchorsSvg + moduleSvgData;
-				svg += '</svg>';
+				svg = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ${WIDTH} ${HEIGHT}">${BACKGROUND_RECT}${anchorsSvgData}${moduleSvgData}</svg>`;
 				break;
 
-			//Without a container
+			// Without a container
 			default:
-				svg += BACKGROUND_RECT + anchorsSvg + moduleSvgData;
+				svg = BACKGROUND_RECT + anchorsSvgData + moduleSvgData;
 				break;
 		}
 
 		// Insert logo in base64 format if provided
 		if (this.options.logoInBase64) {
-			const LOGO_SIZE = this.options.width;
-			const LOGO_WIDTH = (LOGO_SIZE * (this.options.logoWidth || 15)) / 100;
-			const LOGO_PADDING = (this.options.logoPadding || 4) + 0.6; // 0.6 is a magic number to align the logo with the QRCode
+			const QR_CODE_WIDTH_SIZE = this.options.width;
+			const QR_CODE_HEIGHT_SIZE = this.options.height;
+
+			const LOGO_WIDTH = (QR_CODE_WIDTH_SIZE * (this.options.logoWidth || 15)) / 100;
+			const LOGO_HEIGHT = (QR_CODE_HEIGHT_SIZE * (this.options.logoHeight || 15)) / 100;
+			const LOGO_PADDING = this.options.logoPadding || 5;
 			const LOGO_BACKGROUND_COLOR = this.options.logoBackgroundColor || this.options.backgroundColor;
 
-			const LOGO_X = LOGO_SIZE / 2 - LOGO_WIDTH / 2;
-			const LOGO_Y = LOGO_X; // Center the logo
-			const LOGO_BACKGROUND_X = LOGO_X - LOGO_PADDING;
-			const LOGO_BACKGROUND_Y = LOGO_Y - LOGO_PADDING;
+			// Center the logo
+			const LOGO_X = QR_CODE_WIDTH_SIZE / 2 - LOGO_WIDTH / 2;
+			const LOGO_Y = QR_CODE_HEIGHT_SIZE / 2 - LOGO_WIDTH / 2;
+			const LOGO_BACKGROUND_X = QR_CODE_WIDTH_SIZE / 2 - LOGO_WIDTH / 2 - LOGO_PADDING;
+			const LOGO_BACKGROUND_Y = QR_CODE_HEIGHT_SIZE / 2 - LOGO_HEIGHT / 2 - LOGO_PADDING;
 			const LOGO_BACKGROUND_WIDTH = LOGO_WIDTH + LOGO_PADDING * 2;
-			const LOGO_BACKGROUND_HEIGHT = LOGO_BACKGROUND_WIDTH;
+			const LOGO_BACKGROUND_HEIGHT = LOGO_HEIGHT + LOGO_PADDING * 2;
 
-			const LOGO_BACKGROUND_RECT = `<rect x="${LOGO_BACKGROUND_X}" y="${LOGO_BACKGROUND_Y}" width="${LOGO_BACKGROUND_WIDTH}" height="${LOGO_BACKGROUND_HEIGHT}" fill="${LOGO_BACKGROUND_COLOR}" />`;
+			const LOGO_BACKGROUND_RECT = `<rect x="${LOGO_BACKGROUND_X}" y="${LOGO_BACKGROUND_Y}" width="${LOGO_BACKGROUND_WIDTH}" height="${LOGO_BACKGROUND_HEIGHT}" fill="${LOGO_BACKGROUND_COLOR}" style="shape-rendering:crispEdges;"/>`;
 			const LOGO = `<image href="${this.options.logoInBase64}" x="${LOGO_X}" y="${LOGO_Y}" width="${LOGO_WIDTH}" height="${LOGO_WIDTH}" preserveAspectRatio="xMidYMid meet"/>`;
 
 			const CLOSING_TAG_POS = svg.lastIndexOf('</svg>');

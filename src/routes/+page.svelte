@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { QRCode } from '$lib/index';
 
 	let downloadUrl = '';
@@ -52,7 +52,7 @@
 
 <h1>Standard QR Code</h1>
 <div>
-	<QRCode data="Test" />
+	<QRCode data="This is a test" />
 
 	<QRCode data="https://duxreserve.com" />
 
@@ -73,6 +73,10 @@
 	<QRCode data="bitcoin:bc1qmhcxtwkcmkqlpajmd09ygzxwwujql74vdpzwd5" />
 
 	<QRCode data="bitcoin:bc1qmhcxtwkcmkqlpajmd09ygzxwwujql74vdpzwd5" typeNumber={4} />
+
+	<QRCode data="bitcoin:bc1qmhcxtwkcmkqlpajmd09ygzxwwujql74vdpzwd5" errorCorrectionLevel="H" />
+
+	<QRCode data="bitcoin:bc1qmhcxtwkcmkqlpajmd09ygzxwwujql74vdpzwd5" typeNumber={4} errorCorrectionLevel="H" />
 </div>
 
 <h2>Default not join vs join</h2>
@@ -91,6 +95,7 @@
 
 <h2>Size with different width and height</h2>
 <div>
+	<!-- This one may not work for QR scanning -->
 	<QRCode data="https://duxreserve.com" width={100} />
 	<QRCode data="https://duxreserve.com" width={100} height={150} />
 	<QRCode data="https://duxreserve.com" width={150} height={150} />
@@ -104,7 +109,7 @@
 	<QRCode data="https://duxreserve.com" padding={20} />
 </div>
 
-<h2>Colors and background colors</h2>
+<h2>Colors</h2>
 <div>
 	<QRCode data="https://duxreserve.com" color="#990000" />
 	<QRCode data="https://duxreserve.com" color="#009900" />
@@ -112,15 +117,21 @@
 
 	<QRCode data="https://duxreserve.com" backgroundColor="#000000" color="#ffffff" />
 
-	<QRCode data="https://duxreserve.com" anchorOuterColor="#00ff00" anchorInnerColor="#ff0000" />
+	<QRCode data="https://duxreserve.com" anchorOuterColor="#00ff00" anchorInnerColor="blue" />
 
 	<QRCode data="https://duxreserve.com" backgroundColor="yellow" moduleColor="red" anchorInnerColor="green" />
 </div>
 
 <h2>Shape</h2>
-<div>
-	<QRCode data="https://duxreserve.com" shape="square" />
-	<QRCode data="https://duxreserve.com" shape="circle" />
+<div style="display: flex;">
+	<div>
+		<QRCode data="https://duxreserve.com" shape="square" />
+		<p>square (default)</p>
+	</div>
+	<div>
+		<QRCode data="https://duxreserve.com" shape="circle" />
+		<p>circle</p>
+	</div>
 </div>
 
 <h2>Error correction L, M, Q, and H</h2>
@@ -142,19 +153,30 @@
 </div>
 
 <div>
+	<!-- Works without the first slash -->
 	<QRCode data="https://duxreserve.com" logoPath="logo/lightning.svg" logoBackgroundColor="#009900" />
 </div>
 
 <div>
-	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoPadding={10} />
+	<!-- You can set decimal logoPadding  -->
+	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoPadding={14.125} />
 </div>
 
 <div>
-	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoWidth={20} />
+	<!-- You can set decimal logoSize  -->
+	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoSize={22.1} />
+</div>
+
+<p>Logo width & height</p>
+<div>
+	<!-- You can set a different logoWidth and LogoHeight  -->
+	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoWidth={20} logoHeight={30} />
+
+	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" width={256} height={200} logoWidth={20} logoHeight={30} />
 </div>
 
 <div>
-	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="transparent" logoWidth={20} />
+	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="transparent" logoSize={20} />
 </div>
 
 <div>
@@ -176,6 +198,7 @@
 <p>Wait for logo</p>
 
 <div style="min-width: 260px; min-height: 260px;">
+	<!-- Set the min-width and min-height to prevent the element from resizing when the logo is loaded -->
 	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.gif" waitForLogo />
 </div>
 
