@@ -50,6 +50,8 @@
 		| 39
 		| 40 = 0; // QR code Type number (1 ~ 40), or 0 for auto detection
 
+	export let errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H' = 'M'; // Error correction level
+
 	export let backgroundColor = '#ffffff'; // Background color of the QR code
 	export let color = '#000000'; // Modules and anchors color of the QR code. Will be applied to `modulesColor`, `anchorsOuterColor`, and `anchorsInnerColor` properties if they are not defined
 	export let modulesColor = color; // Modules color of the QR code
@@ -57,8 +59,6 @@
 	export let anchorsInnerColor = anchorsOuterColor; // Inner anchors color of the QR code
 
 	export let shape: 'square' | 'circle' = 'square'; // Shape of the QR code
-
-	export let errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H' = 'M'; // Error correction level
 
 	export let isJoin = false; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
 	export let isResponsive = false; // If set to true, the QR code will be responsive and adapt to the available space in its parent element
@@ -85,12 +85,12 @@
 	const OPTIONS: Options = {
 		data,
 		typeNumber,
+		errorCorrectionLevel,
 		backgroundColor,
+		modulesColor,
 		anchorsOuterColor,
 		anchorsInnerColor,
-		modulesColor,
 		shape,
-		errorCorrectionLevel,
 		join: isJoin,
 		container: isResponsive ? 'svg-viewbox' : 'svg',
 		padding,
@@ -104,7 +104,7 @@
 	};
 
 	// If the logo is not defined, the QR code will be visible immediately
-	// Otherwise, it will be visible after the logo has been loaded if `waitForLogo` is set to true
+	// Otherwise, it will be visible after the logo has been loaded if `waitForLogo` is set to true or if the logo is already in base64 with `logoInBase64`
 	let qrCodeIsVisible: boolean = Boolean(logoInBase64) || !waitForLogo;
 
 	const getQrCodeSvg = (regenerationWithLogo = false): string => {
@@ -228,68 +228,68 @@
 
 <!--
 @component
-### QR Code
+### QR Code Generator Component
 
-@param data (string) Data of the QR code to be encoded
-
-&nbsp;
-
-@param typeNumber (number) QR code Type number (1 ~ 40), or 0 for auto detection. Default is 0
+@param data (string) Data of the QR code to be encoded. **Required to generate the QR Code**
 
 &nbsp;
 
-@param backgroundColor (string) Background color of the QR code. Default is '#ffffff'
-@param color (string) Modules and anchors color of the QR code.  Will be applied to `modulesColor`, `anchorsOuterColor`, and `anchorsInnerColor` properties if they are not defined. Default is '#000000'
+@param typeNumber (number) QR code type number (1 ~ 40), or 0 for auto detection. Default is `0`
+
+&nbsp;
+
+@param errorCorrectionLevel (string) Error correction level of the QR Code. Possible values: `'L'`, `'M'`, `'Q'`, `'H'`. Default is `'M'`
+
+&nbsp;
+
+@param backgroundColor (string) Background color of the QR code. Default is `'#ffffff'`
+@param color (string) Modules and anchors color of the QR code.  Will be applied to `modulesColor`, `anchorsOuterColor`, and `anchorsInnerColor` properties if they are not defined. Default is `'#000000'`
 @param modulesColor (string) Modules color of the QR code. Default is the same as the `color` property
 @param anchorsOuterColor (string) Outer anchors color of the QR code. Default is the same as the `modulesColor` property
 @param anchorsInnerColor (string) Inner anchors color of the QR code. Default is the same as the `anchorsOuterColor` property
 
 &nbsp;
 
-@param shape (string) Shape of the QR code. Possible values: 'square', 'circle'. Default is 'square'
+@param shape (string) Shape of the QR code. Possible values: `'square'`, `'circle'`. Default is `'square'`
 
 &nbsp;
 
-@param errorCorrectionLevel (string) Error correction level of the QR Code. Possible values: 'L', 'M', 'Q', 'H'. Default is 'M'
+@param isJoin (boolean) // If `isJoin` is set to `true`, the QR code will be generated as a single SVG element. If set to `false`, each square will be an individual SVG element. Default is `false`
+**Note:** The `isJoin` property is useful for performance optimization, especially when generating a large number of QR codes. However, the colors of the anchors and modules will not differ, and the shape can only be `'square'` when `isJoin` is set to `true`
+@param isResponsive (boolean) If set to `true`, the QR code will be responsive and adapt to the available space in its parent element
 
 &nbsp;
 
-@param isJoin (boolean) // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element. Default is false
-**Note:** The `isJoin` property is useful for performance optimization, especially when generating a large number of QR Codes. However, the colors of the anchors and modules cannot differ, and the shape is only 'square' when isJoin is set to true
-@param isResponsive (boolean) If set to true, the QR code will be responsive and adapt to the available space in its parent element
-
-&nbsp;
-
-@param padding (number) Padding around the QR code. Default is 1
-@param size (number) Width and height dimensions in pixels of the QR code. Default is 256 pixels
+@param padding (number) Padding around the QR code. Default is `1`
+@param size (number) Width and height dimensions in pixels of the QR code. Default is `256` pixels
 @param width (number) The width of the QR Code in pixels. Default is the same as the `size` property
 @param height (number) The height of the QR Code in pixels. Default is the same as the `size` property
 
 &nbsp;
 
 @param logoInBase64 (string) base64-encoded logo image. If it's an empty string (`''`) or undefined, it will be ignored. Use this property instead of `logoPath` for faster logo loading times.
-**Note:** There is no validation of the base64 encoding; ensure it is valid. Default is '' (no logo)
-@param logoPath (string) The path to the logo file to be added to the center of the QR Code. Default is '' (no logo).
-**Note:** With the logo, it is recommended to have a minimum error correction level of 'M' to ensure the QR Code is readable
-@param logoBackgroundColor (string) Color the logo background. Default is '' (same as the QR Code `backgroundColor` property)
-@param logoPadding (number)Padding around the logo. Default is 5
-@param logoSize (number) Size of the logo in percentage relative to the QR code size. Default is 15%
+**Note:** There is no validation of the base64 encoding; ensure it is valid. Default is `''` (no logo)
+@param logoPath (string) The path to the logo file to be added to the center of the QR Code. Default is `''` (no logo).
+**Note:** With the logo, it is recommended to have a minimum error correction level of `'M'` to ensure the QR Code is readable
+@param logoBackgroundColor (string) Color the logo background. Default is `''` (same as the QR Code `backgroundColor` property)
+@param logoPadding (number) Padding around the logo. Default is `5`
+@param logoSize (number) Size of the logo in percentage relative to the QR code size. Default is `15`%
 @param logoWidth (number) Width of the logo in percentage relative to the QR code width. Default is the same as the `logoSize` property
 @param logoHeight (number) Height of the logo in percentage relative to the QR code height. Default is the same as the `logoSize` property
-@param waitForLogo (boolean) If set to true, the QR code will not render until the logo has fully loaded. Default is false
+@param waitForLogo (boolean) If set to `true`, the QR code will not render until the logo has fully loaded. Default is `false`
 
 &nbsp;
 
-@param dispatchDownloadLink (boolean) If set to true, a download link will be generated for the QR code and dispatched to the parent component. Default is false
-@param downloadLinkFileFormat (string) The file format of the download link. Possible values: 'svg', 'png', 'jpg', 'jpeg', 'webp'. Default is 'svg'
+@param dispatchDownloadLink (boolean) If set to `true`, a download link will be generated for the QR code and dispatched to the parent component. Default is `false`
+@param downloadLinkFileFormat (string) The file format of the download link. Possible values: `'svg'`, `'png'`, `'jpg'`, `'jpeg'`, `'webp'`. Default is `'svg'`
 
 &nbsp;
 &nbsp;
 
 @dispatch qrCodeGenerated (void) The QR Code is successfully generated
 @dispatch qrCodeRegeneratedWithLogo (void) The QR Code is successfully regenerated with the logo
-@dispatch qrCodeGenerationFailed (void) The QR Code generation failed
-@dispatch downloadLinkGenerated (string) The download link for the QR Code is generated and dispatched to the parent component if the `dispatchDownloadLink` property is set to true
+@dispatch qrCodeGenerationFailed (void) The QR Code generation failed. Check the console for more information
+@dispatch downloadLinkGenerated (string) The download link for the QR Code is generated and dispatched to the parent component if the `dispatchDownloadLink` property is set to `true`
 
 &nbsp;
 

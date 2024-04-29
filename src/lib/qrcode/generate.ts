@@ -49,17 +49,6 @@
 
 interface Options {
 	data: string; // Data of the QR code to be encoded
-	backgroundColor: string; // Background color of the QR code
-	anchorsOuterColor: string; // Outer color of QR anchors
-	anchorsInnerColor: string; // Inner color of QR anchors
-	modulesColor: string; // Color for QR modules
-	shape: 'square' | 'circle'; // Shape of the QR code modules and anchors
-	errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H'; // Error correction level
-	container?: string; // Container element to render the QR code
-	padding: number; // Padding around the QR code
-	width: number; // Width dimension in pixels of the QR code
-	height: number; // Height dimension in pixels of the QR code
-	join: boolean; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
 	typeNumber:
 		| 0 // Auto detection
 		| 1
@@ -102,6 +91,17 @@ interface Options {
 		| 38
 		| 39
 		| 40; // Type number (1 ~ 40), or 0 for auto detection
+	errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H'; // Error correction level
+	backgroundColor: string; // Background color of the QR code
+	modulesColor: string; // Color for QR modules
+	anchorsOuterColor: string; // Outer color of QR anchors
+	anchorsInnerColor: string; // Inner color of QR anchors
+	shape: 'square' | 'circle'; // Shape of the QR code modules and anchors
+	join: boolean; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
+	container?: string; // Container element to render the QR code
+	padding: number; // Padding around the QR code
+	width: number; // Width dimension in pixels of the QR code
+	height: number; // Height dimension in pixels of the QR code
 	logoInBase64?: string; // Base64 image to be used as a logo in the center of the QR code
 	logoBackgroundColor?: string; // Background color of the logo
 	logoPadding?: number; // Padding around the logo
@@ -1097,12 +1097,12 @@ class QRCode {
 		this.options = {
 			data: '',
 			typeNumber: 0,
+			errorCorrectionLevel: 'M',
 			backgroundColor: '#ffffff',
 			modulesColor: '#000000',
 			anchorsOuterColor: '#000000',
 			anchorsInnerColor: '#000000',
 			shape: 'square',
-			errorCorrectionLevel: 'M',
 			join: false,
 			container: 'svg',
 			padding: 1,

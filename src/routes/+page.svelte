@@ -51,7 +51,7 @@
 </svelte:head>
 
 <h1>Standard QR Code</h1>
-<QRCode data="Hello world" />
+<QRCode data="Hello world!" />
 
 <div>
 	<QRCode data="This is a test" />
@@ -150,7 +150,7 @@
 </div>
 
 <h2>Responsive</h2>
-<div style="width:30%; height:30%;">
+<div style="width: 30%; height: 30%;">
 	<QRCode data="https://duxreserve.com" isResponsive />
 </div>
 
