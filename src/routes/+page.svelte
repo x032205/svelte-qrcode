@@ -242,7 +242,7 @@
 	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning/image.png" />
 </div>
 
-<h2>With download link generated</h2>
+<h2>With download url generated</h2>
 <div>
 	<QRCode
 		data="https://duxreserve.com"
@@ -256,7 +256,7 @@
 	<a href={downloadUrl} download="QR-code-filename" target="_blank">Download QR Code</a>
 {/if}
 
-<h2>With download link generated for join</h2>
+<h2>With download url generated for join</h2>
 <div>
 	<QRCode
 		data="https://duxreserve.com"
@@ -271,7 +271,7 @@
 	<a href={downloadUrlJoin} download="QR-code-filename-not-join" target="_blank">Download QR Code join</a>
 {/if}
 
-<h2>With download link generated for custom color</h2>
+<h2>With download url generated for custom color</h2>
 <div>
 	<QRCode
 		data="https://duxreserve.com"
@@ -305,7 +305,7 @@
 	<a href={downloadUrlDirectBase64} download="QR-code-filename-direct-base64" target="_blank">Download QR Code</a>
 {/if}
 
-<p>With download link generated for PNG</p>
+<p>With download url generated for PNG</p>
 <div>
 	<QRCode
 		data="https://duxreserve.com"
@@ -320,7 +320,7 @@
 	<a href={downloadUrlPng} download="QR-code-filename-png" target="_blank">Download QR Code in png format</a>
 {/if}
 
-<p>With download link generated for JPG</p>
+<p>With download url generated for JPG</p>
 <div>
 	<QRCode
 		data="https://duxreserve.com"
@@ -335,7 +335,7 @@
 	<a href={downloadUrlJpg} download="QR-code-filename-jpg" target="_blank">Download QR Code in jpeg (jpg) format</a>
 {/if}
 
-<p>With download link generated for JPEG</p>
+<p>With download url generated for JPEG</p>
 <div>
 	<QRCode
 		data="https://duxreserve.com"
@@ -350,7 +350,7 @@
 	<a href={downloadUrlJpeg} download="QR-code-filename-jpeg" target="_blank">Download QR Code in jpeg format</a>
 {/if}
 
-<p>With download link generated for WEBP</p>
+<p>With download url generated for WEBP</p>
 <div>
 	<QRCode
 		data="https://duxreserve.com"

@@ -12,7 +12,7 @@ QR Code generator component for Svelte & SvelteKit, with no dependencies
 Use your package manager to install the module:
 
 ```shell
-npm install @castlenine/svelte-qrcode
+npm install --save-dev @castlenine/svelte-qrcode
 ```
 
 ## Quick Start
@@ -105,13 +105,13 @@ To select error correction level, various factors such as the operating environm
 
 You can customize the colors of the QR code using hexadecimal color codes or [CSS color keywords](https://www.w3.org/wiki/CSS/Properties/color/keywords) such as `'transparent'` and `'red'`.
 
-| Property name       | Type     | Default value                        |
-| ------------------- | -------- | ------------------------------------ |
-| `backgroundColor`   | `string` | `'#ffffff'`                          |
-| `color`             | `string` | `'#000000'`                          |
-| `modulesColor`      | `string` | Same as `color` property             |
-| `anchorsOuterColor` | `string` | Same as `modulesColor` property      |
-| `anchorsInnerColor` | `string` | Same as `anchorsOuterColor` property |
+| Property name       | Type     | Default value                        | Note                                                                                                |
+| ------------------- | -------- | ------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| `backgroundColor`   | `string` | `'#ffffff'`                          |                                                                                                     |
+| `color`             | `string` | `'#000000'`                          | Will be apply to `modulesColor`,`anchorsOuterColor` and `anchorsInnerColor` if they are not defined |
+| `modulesColor`      | `string` | Same as `color` property             |                                                                                                     |
+| `anchorsOuterColor` | `string` | Same as `modulesColor` property      |                                                                                                     |
+| `anchorsInnerColor` | `string` | Same as `anchorsOuterColor` property |                                                                                                     |
 
 ```svelte
 <QRCode data="https://duxreserve.com" backgroundColor="#009900" color="#ffffff" />
@@ -180,12 +180,12 @@ The `padding` is measured in "module units", while the `size`, `width` and `heig
 
 **Note:** It's recommended to use a square-like QR code if you prefer different `width` and `height` values. Test the QR code with different sizes to ensure it is scannable.
 
-| Property name | Type     | Default value           |
-| ------------- | -------- | ----------------------- |
-| `padding`     | `number` | `1` "module unit"       |
-| `size`        | `number` | `256` pixels            |
-| `width`       | `number` | Same as `size` property |
-| `height`      | `number` | Same as `size` property |
+| Property name | Type     | Default value           | Note                                                          |
+| ------------- | -------- | ----------------------- | ------------------------------------------------------------- |
+| `padding`     | `number` | `1` "module unit"       |                                                               |
+| `size`        | `number` | `256` pixels            | Will be apply to `width` and `height` if they are not defined |
+| `width`       | `number` | Same as `size` property |                                                               |
+| `height`      | `number` | Same as `size` property |                                                               |
 
 ```svelte
 <QRCode data="https://duxreserve.com" padding={5} size={1000} />
@@ -205,16 +205,16 @@ If you don't set `logoBackgroundColor`, the logo will have the same background c
 
 **Note:** There is no validation of the base64 encoding for `logoInBase64`; ensure it is valid.
 
-| Property name         | Type                    | Default value                                         |
-| --------------------- | ----------------------- | ----------------------------------------------------- |
-| `logoInBase64`        | base64 (image) `string` | `''` (no logo)                                        |
-| `logoPath`            | `string`                | `''` (no logo)                                        |
-| `logoBackgroundColor` | `string`                | `''` (same as the QR Code `backgroundColor` property) |
-| `logoPadding`         | `number`                | `5` "module units"                                    |
-| `logoSize`            | `number`                | `15`% of the QR code `size` property                  |
-| `logoWidth`           | `number`                | Same as `logoSize` property                           |
-| `logoHeight`          | `number`                | Same as `logoSize` property                           |
-| `waitForLogo`         | `boolean`               | `false`                                               |
+| Property name         | Type                    | Default value                                         | Note                                                                  |
+| --------------------- | ----------------------- | ----------------------------------------------------- | --------------------------------------------------------------------- |
+| `logoInBase64`        | base64 (image) `string` | `''` (no logo)                                        |                                                                       |
+| `logoPath`            | `string`                | `''` (no logo)                                        |                                                                       |
+| `logoBackgroundColor` | `string`                | `''` (same as the QR Code `backgroundColor` property) |                                                                       |
+| `logoPadding`         | `number`                | `5` "module units"                                    |                                                                       |
+| `logoSize`            | `number`                | `15`% of the QR code `size` property                  | Will be apply to `logoWidth` and `logoHeight` if they are not defined |
+| `logoWidth`           | `number`                | Same as `logoSize` property                           |                                                                       |
+| `logoHeight`          | `number`                | Same as `logoSize` property                           |                                                                       |
+| `waitForLogo`         | `boolean`               | `false`                                               |                                                                       |
 
 ```svelte
 <QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" />
@@ -250,7 +250,7 @@ Add the `download` attribute to the anchor tag to specify the filename for the d
 
 Additionally, include the `target="_blank"` attribute in the anchor tag to open the download in a new tab.
 
-**Note:** You cannot use the `downloadUrlFileFormat` other than `'svg'` in a non-browser environment (server-side rendering).
+**Note:** You cannot use the `downloadUrlFileFormat` other than `'svg'` in a non-browser environment.
 
 | Property name           | Type                                          | Default value |
 | ----------------------- | --------------------------------------------- | ------------- |
