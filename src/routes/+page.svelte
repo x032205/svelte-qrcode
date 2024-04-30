@@ -247,8 +247,8 @@
 	<QRCode
 		data="https://duxreserve.com"
 		logoPath="/logo/lightning.svg"
-		dispatchDownloadLink
-		on:downloadLinkGenerated={(data) => handleDownloadLinkGenerated(data.detail.url)}
+		dispatchDownloadUrl
+		on:downloadLinkGenerated={(event) => handleDownloadLinkGenerated(event.detail.url)}
 	/>
 </div>
 
@@ -262,8 +262,8 @@
 		data="https://duxreserve.com"
 		logoPath="/logo/lightning.svg"
 		isJoin
-		dispatchDownloadLink
-		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedJoin(data.detail.url)}
+		dispatchDownloadUrl
+		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedJoin(event.detail.url)}
 	/>
 </div>
 
@@ -281,8 +281,8 @@
 		anchorsInnerColor="orange"
 		logoPath="/logo/lightning.svg"
 		logoBackgroundColor="blue"
-		dispatchDownloadLink
-		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedCustomColor(data.detail.url)}
+		dispatchDownloadUrl
+		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedCustomColor(event.detail.url)}
 	/>
 </div>
 
@@ -296,8 +296,8 @@
 		data="https://duxreserve.com"
 		logoInBase64="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Im0xOC40OTYgMTAuNzA5bC04LjYzNiA4Ljg4Yy0uMjQuMjQ2LS42MzgtLjAzOS0uNDgyLS4zNDVsMy4wNzQtNi4wNjZhLjMuMyAwIDAgMC0uMjY4LS40MzZINS43MThhLjMuMyAwIDAgMS0uMjE0LS41MWw4LjAxLTguMTE1Yy4yMzItLjIzNS42MTguMDIzLjQ4OS4zMjhMMTEuNzA2IDkuODZhLjMuMyAwIDAgMCAuMjguNDE3bDYuMjkxLS4wNzhhLjMuMyAwIDAgMSAuMjIuNTA5Ii8+PC9zdmc+"
 		logoBackgroundColor="#eeff00"
-		dispatchDownloadLink
-		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedForDirectBase64(data.detail.url)}
+		dispatchDownloadUrl
+		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedForDirectBase64(event.detail.url)}
 	/>
 </div>
 
@@ -310,9 +310,9 @@
 	<QRCode
 		data="https://duxreserve.com"
 		logoPath="/logo/lightning.svg"
-		dispatchDownloadLink
-		downloadLinkFileFormat="png"
-		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedPng(data.detail.url)}
+		dispatchDownloadUrl
+		downloadUrlFileFormat="png"
+		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedPng(event.detail.url)}
 	/>
 </div>
 
@@ -325,9 +325,9 @@
 	<QRCode
 		data="https://duxreserve.com"
 		logoPath="/logo/lightning.svg"
-		dispatchDownloadLink
-		downloadLinkFileFormat="jpg"
-		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedJpg(data.detail.url)}
+		dispatchDownloadUrl
+		downloadUrlFileFormat="jpg"
+		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedJpg(event.detail.url)}
 	/>
 </div>
 
@@ -340,9 +340,9 @@
 	<QRCode
 		data="https://duxreserve.com"
 		logoPath="/logo/lightning.svg"
-		dispatchDownloadLink
-		downloadLinkFileFormat="jpeg"
-		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedJpeg(data.detail.url)}
+		dispatchDownloadUrl
+		downloadUrlFileFormat="jpeg"
+		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedJpeg(event.detail.url)}
 	/>
 </div>
 
@@ -355,9 +355,9 @@
 	<QRCode
 		data="https://duxreserve.com"
 		logoPath="/logo/lightning.svg"
-		dispatchDownloadLink
-		downloadLinkFileFormat="webp"
-		on:downloadLinkGenerated={(data) => handleDownloadLinkGeneratedWebp(data.detail.url)}
+		dispatchDownloadUrl
+		downloadUrlFileFormat="webp"
+		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedWebp(event.detail.url)}
 	/>
 </div>
 

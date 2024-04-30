@@ -77,8 +77,8 @@
 	export let logoHeight = logoSize; // Height of the logo in percentage relative to the QR code height
 	export let waitForLogo = false; // If set to true, the QR code will not render until the logo has fully loaded
 
-	export let dispatchDownloadLink = false; // If set to true, a download link will be generated for the QR code and dispatched to the parent component
-	export let downloadLinkFileFormat: 'svg' | 'png' | 'jpg' | 'jpeg' | 'webp' = 'svg'; // The file format of the download link
+	export let dispatchDownloadUrl = false; // If set to true, a download link will be generated for the QR code and dispatched to the parent component
+	export let downloadUrlFileFormat: 'svg' | 'png' | 'jpg' | 'jpeg' | 'webp' = 'svg'; // The file format of the download link
 
 	const dispatch = createEventDispatcher();
 
@@ -164,12 +164,18 @@
 
 		const QR_CODE_URL = URL.createObjectURL(QR_CODE_BLOB);
 
-		if (downloadLinkFileFormat === 'svg') {
+		if (downloadUrlFileFormat === 'svg') {
 			// Dispatch the download link for the SVG file without converting it
 			dispatch('downloadLinkGenerated', {
 				url: QR_CODE_URL,
 			});
 		} else {
+			if (typeof document === 'undefined') {
+				console.error("Cannot use the downloadUrlFileFormat other than 'svg' in a non-browser environment");
+
+				return;
+			}
+
 			// Load and convert the SVG file to the specified file format
 			const IMAGE = new Image();
 
@@ -191,7 +197,7 @@
 							jpg: 'image/jpeg',
 							jpeg: 'image/jpeg',
 							webp: 'image/webp',
-						}[downloadLinkFileFormat] || 'image/png';
+						}[downloadUrlFileFormat] || 'image/png';
 
 					// Convert canvas to the desired file format
 					const CONVERTED_FILE_URL = CANVAS.toDataURL(FILE_FORMAT);
@@ -220,7 +226,7 @@
 
 		qrCodeIsVisible = true;
 
-		if (dispatchDownloadLink && qrCode) {
+		if (dispatchDownloadUrl && qrCode) {
 			convertQrCodeToFileFormat(qrCode);
 		}
 	});
@@ -280,8 +286,8 @@
 
 &nbsp;
 
-@param dispatchDownloadLink (boolean) If set to `true`, a download link will be generated for the QR code and dispatched to the parent component. Default is `false`
-@param downloadLinkFileFormat (string) The file format of the download link. Possible values: `'svg'`, `'png'`, `'jpg'`, `'jpeg'`, `'webp'`. Default is `'svg'`
+@param dispatchDownloadUrl (boolean) If set to `true`, a download link will be generated for the QR code and dispatched to the parent component. Default is `false`
+@param downloadUrlFileFormat (string) The file format of the download link. Possible values: `'svg'`, `'png'`, `'jpg'`, `'jpeg'`, `'webp'`. Default is `'svg'`
 
 &nbsp;
 &nbsp;
@@ -289,7 +295,7 @@
 @dispatch qrCodeGenerated (void) The QR Code is successfully generated
 @dispatch qrCodeRegeneratedWithLogo (void) The QR Code is successfully regenerated with the logo
 @dispatch qrCodeGenerationFailed (void) The QR Code generation failed. Check the console for more information
-@dispatch downloadLinkGenerated (string) The download link for the QR Code is generated and dispatched to the parent component if the `dispatchDownloadLink` property is set to `true`
+@dispatch downloadLinkGenerated (string) The download link for the QR Code is generated and dispatched to the parent component if the `dispatchDownloadUrl` property is set to `true`
 
 &nbsp;
 

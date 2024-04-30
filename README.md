@@ -40,6 +40,10 @@ Here is a list of the changes:
 | `base64Image`     | `logoInBase64`         |                                                                      |
 | `logoWidth`       | `logoSize`             | `logoSize` is applied to `logoWidth` and `logoHeight` (new property) |
 
+| Old event name         | New event name        |
+| ---------------------- | --------------------- |
+| `dispatchDownloadLink` | `dispatchDownloadUrl` |
+
 ## Properties
 
 ### Data
@@ -240,16 +244,18 @@ If you don't set `logoBackgroundColor`, the logo will have the same background c
 
 ### Downloading the QR Code
 
-You can download the QR code as a file (`'svg'` | `'png'` | `'jpg'` | `'jpeg'` | `'webp'`) by using an anchor tag that initiates the download. To enable this functionality, set the `dispatchDownloadLink` property to `true` and listen for the `downloadLinkGenerated` event to retrieve the download URL. You can choose the file format by setting the `downloadLinkFileFormat` property to `'svg'` (default), `'png'`, `'jpg'`, `'jpeg'`, or `'webp'`.
+You can download the QR code as a file (`'svg'` | `'png'` | `'jpg'` | `'jpeg'` | `'webp'`) by using an anchor tag that initiates the download. To enable this functionality, set the `dispatchDownloadUrl` property to `true` and listen for the `downloadLinkGenerated` event to retrieve the download URL. You can choose the file format by setting the `downloadUrlFileFormat` property to `'svg'` (default), `'png'`, `'jpg'`, `'jpeg'`, or `'webp'`.
 
-Add the `download` attribute to the anchor tag to specify the filename for the downloaded file. The extension is optional in the file name; the file format will be determined by the `downloadLinkFileFormat` property.
+Add the `download` attribute to the anchor tag to specify the filename for the downloaded file. The extension is optional in the file name; the file format will be determined by the `downloadUrlFileFormat` property.
 
 Additionally, include the `target="_blank"` attribute in the anchor tag to open the download in a new tab.
 
-| Property name            | Type                                          | Default value |
-| ------------------------ | --------------------------------------------- | ------------- |
-| `dispatchDownloadLink`   | `boolean`                                     | `false`       |
-| `downloadLinkFileFormat` | `'svg'`, `'png'`, `'jpg'`, `'jpeg'`, `'webp'` | `'svg'`       |
+**Note:** You cannot use the `downloadUrlFileFormat` other than `'svg'` in a non-browser environment (server-side rendering).
+
+| Property name           | Type                                          | Default value |
+| ----------------------- | --------------------------------------------- | ------------- |
+| `dispatchDownloadUrl`   | `boolean`                                     | `false`       |
+| `downloadUrlFileFormat` | `'svg'`, `'png'`, `'jpg'`, `'jpeg'`, `'webp'` | `'svg'`       |
 
 ```svelte
 <script>
@@ -266,9 +272,9 @@ Additionally, include the `target="_blank"` attribute in the anchor tag to open 
   <QRCode
     data="https://duxreserve.com"
     logoPath="/logo/lightning.svg"
-    downloadLinkFileFormat="png"
-    dispatchDownloadLink
-    on:downloadLinkGenerated={(data) => handleDownloadLinkGenerated(data.detail.url)}
+    downloadUrlFileFormat="png"
+    dispatchDownloadUrl
+    on:downloadLinkGenerated={(event) => handleDownloadLinkGenerated(event.detail.url)}
   />
 </div>
 
