@@ -40,6 +40,11 @@
  *
  * - Added haveBackgroundRoundedEdges
  *
+ * @version 2.2.0 (2024-04-30)
+ * @editor Alexandre Castlenine
+ *
+ * - Added haveGappedModules
+ *
  */
 
 //---------------------------------------------------------------------
@@ -103,6 +108,7 @@ interface Options {
 	anchorsInnerColor: string; // Inner color of QR anchors
 	shape: 'square' | 'circle'; // Shape of the QR code modules and anchors
 	haveBackgroundRoundedEdges: boolean; // If set to true, the QR code will have rounded edges
+	haveGappedModules: boolean; // If set to true, the QR code will have gapped modules
 	join: boolean; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
 	container?: string; // Container element to render the QR code
 	padding: number; // Padding around the QR code
@@ -1110,6 +1116,7 @@ class QRCode {
 			anchorsInnerColor: '#000000',
 			shape: 'square',
 			haveBackgroundRoundedEdges: false,
+			haveGappedModules: false,
 			join: false,
 			container: 'svg',
 			padding: 1,
@@ -1248,24 +1255,36 @@ class QRCode {
 					let py: number | string = y * Y_SIZE + this.options.padding * Y_SIZE;
 
 					if (JOIN) {
-						// Modules as a part of svg path data, thanks to @danioso
-						let w: number | string = X_SIZE + px;
-						let h: number | string = Y_SIZE + py;
+						// Modules as a part of svg path data
+						if (this.options.haveGappedModules && !this.isAnchor(x, y, LENGTH)) {
+							let w: number | string = X_SIZE - X_SIZE * (10 / 100) + px;
+							let h: number | string = Y_SIZE - Y_SIZE * (10 / 100) + py;
 
-						px = Number.isInteger(px) ? Number(px) : px.toFixed(2);
-						py = Number.isInteger(py) ? Number(py) : py.toFixed(2);
-						w = Number.isInteger(w) ? Number(w) : w.toFixed(2);
-						h = Number.isInteger(h) ? Number(h) : h.toFixed(2);
+							px = Number.isInteger(px) ? Number(px) : px.toFixed(2);
+							py = Number.isInteger(py) ? Number(py) : py.toFixed(2);
+							w = Number.isInteger(w) ? Number(w) : w.toFixed(2);
+							h = Number.isInteger(h) ? Number(h) : h.toFixed(2);
 
-						pathSvgData += `M${px},${py} V${h} H${w} V${py} H${px} Z `;
+							pathSvgData += `M${px},${py} V${h} H${w} V${py} H${px} Z `;
+						} else {
+							let w: number | string = X_SIZE + px;
+							let h: number | string = Y_SIZE + py;
+
+							px = Number.isInteger(px) ? Number(px) : px.toFixed(2);
+							py = Number.isInteger(py) ? Number(py) : py.toFixed(2);
+							w = Number.isInteger(w) ? Number(w) : w.toFixed(2);
+							h = Number.isInteger(h) ? Number(h) : h.toFixed(2);
+
+							pathSvgData += `M${px},${py} V${h} H${w} V${py} H${px} Z `;
+						}
 					} else {
 						if (!this.isAnchor(x, y, LENGTH)) {
 							if (this.options.shape !== 'square') {
 								// Modules as circle element
-								modulesSvgData += `<circle class="module" cx="${px + X_SIZE / 2}" cy="${py + Y_SIZE / 2}" r="${Math.min(X_SIZE, Y_SIZE) / 2}" style="fill:${this.options.modulesColor};"/>`;
+								modulesSvgData += `<circle class="module" cx="${px + X_SIZE / 2}" cy="${py + Y_SIZE / 2}" r="${Math.min(X_SIZE, Y_SIZE) / (this.options.haveGappedModules ? 2.4 : 2)}" style="fill:${this.options.modulesColor};"/>`;
 							} else {
 								// Modules as rectangle element
-								modulesSvgData += `<rect class="module" x="${px}" y="${py}" width="${X_SIZE}" height="${Y_SIZE}" style="fill:${this.options.modulesColor};shape-rendering:crispEdges;"/>`;
+								modulesSvgData += `<rect class="module" x="${px}" y="${py}" width="${this.options.haveGappedModules ? X_SIZE - X_SIZE * (10 / 100) : X_SIZE}" height="${this.options.haveGappedModules ? Y_SIZE - Y_SIZE * (10 / 100) : Y_SIZE}" style="fill:${this.options.modulesColor};shape-rendering:crispEdges;"/>`;
 							}
 						}
 					}
@@ -1308,7 +1327,7 @@ class QRCode {
 				svg = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="${WIDTH}" height="${HEIGHT}">${BACKGROUND_RECT}${anchorsSvgData}${modulesSvgData}</svg>`;
 				break;
 
-			// Viewbox for responsive use in a browser, thanks to @danioso
+			// Viewbox for responsive use in a browser
 			case 'svg-viewbox':
 				svg = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ${WIDTH} ${HEIGHT}">${BACKGROUND_RECT}${anchorsSvgData}${modulesSvgData}</svg>`;
 				break;

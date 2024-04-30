@@ -2,7 +2,7 @@
 
 # `@castlenine/svelte-qrcode`
 
-[![npm.badge]][npm] [![repl.badge]][repl]
+[![npm.badge]][npm] [![download.badge]][download] [![repl.badge]][repl] [![generator.badge]][generator]
 
 QR Code generator component for Svelte & SvelteKit, with no dependencies
 </div>
@@ -11,7 +11,7 @@ QR Code generator component for Svelte & SvelteKit, with no dependencies
 
 Use your package manager to install the module:
 
-```shell
+```bash
 npm install --save-dev @castlenine/svelte-qrcode
 ```
 
@@ -33,13 +33,13 @@ Many new features have been added to version 2.0.0, and some properties have bee
 
 Here is a list of the changes:
 
-| Old property name      | New property name           | Note                                                                 |
-| ---------------------- | --------------------------- | -------------------------------------------------------------------- |
-| `content`              | `data`                      |                                                                      |
-| `errorCorrection`      | `errorCorrectionLevel`      |                                                                      |
-| `base64Image`          | `logoInBase64`              |                                                                      |
-| `logoWidth`            | `logoSize`                  | `logoSize` is applied to `logoWidth` and `logoHeight` (new property) |
-| `dispatchDownloadLink` | `dispatchDownloadUrl`       |                                                                      |
+| Old property name      | New property name      | Note                                                                 |
+| ---------------------- | ---------------------- | -------------------------------------------------------------------- |
+| `content`              | `data`                 |                                                                      |
+| `errorCorrection`      | `errorCorrectionLevel` |                                                                      |
+| `base64Image`          | `logoInBase64`         |                                                                      |
+| `logoWidth`            | `logoSize`             | `logoSize` is applied to `logoWidth` and `logoHeight` (new property) |
+| `dispatchDownloadLink` | `dispatchDownloadUrl`  |                                                                      |
 
 | Old event name          | New event name         |
 | ----------------------- | ---------------------- |
@@ -128,12 +128,15 @@ You can customize the colors of the QR code using hexadecimal color codes or [CS
 
 You have two options to customize the QR code shape: `'square'` and `'circle'`.
 
-You can also set the `haveBackgroundRoundedEdges` property to `true` to round the edges of the QR code background.
+Set the `haveBackgroundRoundedEdges` property to `true` to round the edges of the QR code background.
+
+Set the `haveGappedModules` property to `true` to create gaps between the modules.
 
 | Property name                | Type                   | Default value |
 | ---------------------------- | ---------------------- | ------------- |
 | `shape`                      | `'square'`, `'circle'` | `'square'`    |
 | `haveBackgroundRoundedEdges` | `boolean`              | `false`       |
+| `haveGappedModules`          | `boolean`              | `false`       |
 
 ```svelte
 <!-- No need to set the shape for `square` (default value) -->
@@ -142,6 +145,8 @@ You can also set the `haveBackgroundRoundedEdges` property to `true` to round th
 <QRCode data="https://duxreserve.com" shape="circle" />
 
 <QRCode data="https://duxreserve.com" haveBackgroundRoundedEdges />
+
+<QRCode data="https://duxreserve.com" haveGappedModules />
 ```
 
 ![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample-square.svg?sanitize=true)
@@ -149,6 +154,8 @@ You can also set the `haveBackgroundRoundedEdges` property to `true` to round th
 ![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample-circle.svg?sanitize=true)
 
 ![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample-rounded-edge.svg?sanitize=true)
+
+![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample-gapped-modules.svg?sanitize=true)
 
 ### Join in unique SVG element
 
@@ -319,7 +326,11 @@ Sample URL for a John Doe user on the Acme app:
 
 ![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample-totp.svg?sanitize=true)
 
-[npm.badge]: https://img.shields.io/npm/v/@castlenine/svelte-qrcode
 [npm]: https://www.npmjs.com/package/@castlenine/svelte-qrcode
+[npm.badge]: https://img.shields.io/npm/v/@castlenine/svelte-qrcode
+[download]: https://www.npmjs.com/package/@castlenine/svelte-qrcode
+[download.badge]: https://img.shields.io/npm/d18m/@castlenine/svelte-qrcode
 [repl]: https://svelte.dev/repl/854005682a57464291a52a86a9f9d321?version=4.2.15
 [repl.badge]: https://img.shields.io/static/v1?label=&message=Svelte+REPL&logo=svelte&logoColor=fff&color=ff3e00
+[generator]: https://qrcode-generator-tool.vercel.app/
+[generator.badge]: https://img.shields.io/badge/QR%20code%20generator-blue

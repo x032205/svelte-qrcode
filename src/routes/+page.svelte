@@ -90,6 +90,7 @@
 <div>
 	<QRCode data="https://duxreserve.com" />
 	<QRCode data="https://duxreserve.com" isJoin />
+	<QRCode data="https://duxreserve.com" isJoin haveGappedModules />
 </div>
 
 <h2>Size 50 to 200</h2>
@@ -153,6 +154,16 @@
 		<div>
 			<QRCode data="https://duxreserve.com" backgroundColor="#000000" color="#ffffff" shape="circle" haveBackgroundRoundedEdges />
 			<p>circle with haveBackgroundRoundedEdges</p>
+		</div>
+	</div>
+	<div style="display: flex; gap: 32px;">
+		<div>
+			<QRCode data="https://duxreserve.com" shape="square" haveGappedModules />
+			<p>square (default) with haveGappedModules</p>
+		</div>
+		<div>
+			<QRCode data="https://duxreserve.com" shape="circle" haveGappedModules />
+			<p>circle with haveGappedModules</p>
 		</div>
 	</div>
 </div>
@@ -297,6 +308,7 @@
 		anchorsInnerColor="orange"
 		logoPath="/logo/lightning.svg"
 		logoBackgroundColor="blue"
+		haveGappedModules
 		dispatchDownloadUrl
 		on:downloadUrlGenerated={(event) => handleDownloadUrlGeneratedCustomColor(event.detail.url)}
 	/>
