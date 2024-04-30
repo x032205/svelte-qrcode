@@ -35,6 +35,11 @@
  * - Added shape property
  * - Code refactored to use template literals
  *
+ * @version 2.1.0 (2024-04-30)
+ * @editor Alexandre Castlenine
+ *
+ * - Added haveBackgroundRoundedEdges
+ *
  */
 
 //---------------------------------------------------------------------
