@@ -13,35 +13,35 @@
 	let downloadUrlJpeg = '';
 	let downloadUrlWebp = '';
 
-	const handleDownloadLinkGenerated = (url = '') => {
+	const handleDownloadUrlGenerated = (url = '') => {
 		downloadUrl = url;
 	};
 
-	const handleDownloadLinkGeneratedJoin = (url = '') => {
+	const handleDownloadUrlGeneratedJoin = (url = '') => {
 		downloadUrlJoin = url;
 	};
 
-	const handleDownloadLinkGeneratedCustomColor = (url = '') => {
+	const handleDownloadUrlGeneratedCustomColor = (url = '') => {
 		downloadUrlCustomColor = url;
 	};
 
-	const handleDownloadLinkGeneratedForDirectBase64 = (url = '') => {
+	const handleDownloadUrlGeneratedForDirectBase64 = (url = '') => {
 		downloadUrlDirectBase64 = url;
 	};
 
-	const handleDownloadLinkGeneratedPng = (url = '') => {
+	const handleDownloadUrlGeneratedPng = (url = '') => {
 		downloadUrlPng = url;
 	};
 
-	const handleDownloadLinkGeneratedJpg = (url = '') => {
+	const handleDownloadUrlGeneratedJpg = (url = '') => {
 		downloadUrlJpg = url;
 	};
 
-	const handleDownloadLinkGeneratedJpeg = (url = '') => {
+	const handleDownloadUrlGeneratedJpeg = (url = '') => {
 		downloadUrlJpeg = url;
 	};
 
-	const handleDownloadLinkGeneratedWebp = (url = '') => {
+	const handleDownloadUrlGeneratedWebp = (url = '') => {
 		downloadUrlWebp = url;
 	};
 </script>
@@ -127,17 +127,33 @@
 	<QRCode data="https://duxreserve.com" anchorsOuterColor="#00ff00" anchorsInnerColor="blue" />
 
 	<QRCode data="https://duxreserve.com" backgroundColor="yellow" modulesColor="red" anchorsInnerColor="green" />
+
+	<QRCode data="https://duxreserve.com" backgroundColor="yellow" modulesColor="red" anchorsInnerColor="green" shape="circle" />
+
+	<QRCode data="https://duxreserve.com" backgroundColor="yellow" modulesColor="red" anchorsInnerColor="green" shape="circle" haveBackgroundRoundedEdges />
 </div>
 
 <h2>Shape</h2>
-<div style="display: flex;">
-	<div>
-		<QRCode data="https://duxreserve.com" shape="square" />
-		<p>square (default)</p>
+<div style="display: flex; flex-direction: column;">
+	<div style="display: flex; gap: 32px;">
+		<div>
+			<QRCode data="https://duxreserve.com" shape="square" />
+			<p>square (default)</p>
+		</div>
+		<div>
+			<QRCode data="https://duxreserve.com" shape="circle" />
+			<p>circle</p>
+		</div>
 	</div>
-	<div>
-		<QRCode data="https://duxreserve.com" shape="circle" />
-		<p>circle</p>
+	<div style="display: flex; gap: 32px;">
+		<div>
+			<QRCode data="https://duxreserve.com" backgroundColor="#0000FF" color="#ffffff" shape="square" haveBackgroundRoundedEdges />
+			<p>square (default) with haveBackgroundRoundedEdges</p>
+		</div>
+		<div>
+			<QRCode data="https://duxreserve.com" backgroundColor="#000000" color="#ffffff" shape="circle" haveBackgroundRoundedEdges />
+			<p>circle with haveBackgroundRoundedEdges</p>
+		</div>
 	</div>
 </div>
 
@@ -248,7 +264,7 @@
 		data="https://duxreserve.com"
 		logoPath="/logo/lightning.svg"
 		dispatchDownloadUrl
-		on:downloadLinkGenerated={(event) => handleDownloadLinkGenerated(event.detail.url)}
+		on:downloadUrlGenerated={(event) => handleDownloadUrlGenerated(event.detail.url)}
 	/>
 </div>
 
@@ -263,7 +279,7 @@
 		logoPath="/logo/lightning.svg"
 		isJoin
 		dispatchDownloadUrl
-		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedJoin(event.detail.url)}
+		on:downloadUrlGenerated={(event) => handleDownloadUrlGeneratedJoin(event.detail.url)}
 	/>
 </div>
 
@@ -282,7 +298,7 @@
 		logoPath="/logo/lightning.svg"
 		logoBackgroundColor="blue"
 		dispatchDownloadUrl
-		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedCustomColor(event.detail.url)}
+		on:downloadUrlGenerated={(event) => handleDownloadUrlGeneratedCustomColor(event.detail.url)}
 	/>
 </div>
 
@@ -297,7 +313,7 @@
 		logoInBase64="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Im0xOC40OTYgMTAuNzA5bC04LjYzNiA4Ljg4Yy0uMjQuMjQ2LS42MzgtLjAzOS0uNDgyLS4zNDVsMy4wNzQtNi4wNjZhLjMuMyAwIDAgMC0uMjY4LS40MzZINS43MThhLjMuMyAwIDAgMS0uMjE0LS41MWw4LjAxLTguMTE1Yy4yMzItLjIzNS42MTguMDIzLjQ4OS4zMjhMMTEuNzA2IDkuODZhLjMuMyAwIDAgMCAuMjguNDE3bDYuMjkxLS4wNzhhLjMuMyAwIDAgMSAuMjIuNTA5Ii8+PC9zdmc+"
 		logoBackgroundColor="#eeff00"
 		dispatchDownloadUrl
-		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedForDirectBase64(event.detail.url)}
+		on:downloadUrlGenerated={(event) => handleDownloadUrlGeneratedForDirectBase64(event.detail.url)}
 	/>
 </div>
 
@@ -312,7 +328,7 @@
 		logoPath="/logo/lightning.svg"
 		dispatchDownloadUrl
 		downloadUrlFileFormat="png"
-		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedPng(event.detail.url)}
+		on:downloadUrlGenerated={(event) => handleDownloadUrlGeneratedPng(event.detail.url)}
 	/>
 </div>
 
@@ -327,7 +343,7 @@
 		logoPath="/logo/lightning.svg"
 		dispatchDownloadUrl
 		downloadUrlFileFormat="jpg"
-		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedJpg(event.detail.url)}
+		on:downloadUrlGenerated={(event) => handleDownloadUrlGeneratedJpg(event.detail.url)}
 	/>
 </div>
 
@@ -342,7 +358,7 @@
 		logoPath="/logo/lightning.svg"
 		dispatchDownloadUrl
 		downloadUrlFileFormat="jpeg"
-		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedJpeg(event.detail.url)}
+		on:downloadUrlGenerated={(event) => handleDownloadUrlGeneratedJpeg(event.detail.url)}
 	/>
 </div>
 
@@ -357,7 +373,7 @@
 		logoPath="/logo/lightning.svg"
 		dispatchDownloadUrl
 		downloadUrlFileFormat="webp"
-		on:downloadLinkGenerated={(event) => handleDownloadLinkGeneratedWebp(event.detail.url)}
+		on:downloadUrlGenerated={(event) => handleDownloadUrlGeneratedWebp(event.detail.url)}
 	/>
 </div>
 
