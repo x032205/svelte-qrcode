@@ -168,7 +168,7 @@
 
 		if (downloadUrlFileFormat === 'svg') {
 			// Dispatch the download url for the SVG file without converting it
-			dispatch('downloadLinkGenerated', {
+			dispatch('downloadUrlGenerated', {
 				url: QR_CODE_URL,
 			});
 		} else {
@@ -204,7 +204,7 @@
 					// Convert canvas to the desired file format
 					const CONVERTED_FILE_URL = CANVAS.toDataURL(FILE_FORMAT);
 
-					dispatch('downloadLinkGenerated', {
+					dispatch('downloadUrlGenerated', {
 						url: CONVERTED_FILE_URL,
 					});
 				}
@@ -298,7 +298,7 @@
 @dispatch qrCodeGenerated (void) The QR Code is successfully generated
 @dispatch qrCodeRegeneratedWithLogo (void) The QR Code is successfully regenerated with the logo
 @dispatch qrCodeGenerationFailed (void) The QR Code generation failed. Check the console for more information
-@dispatch downloadLinkGenerated (string) The download url for the QR Code is generated and dispatched to the parent component if the `dispatchDownloadUrl` property is set to `true`
+@dispatch downloadUrlGenerated (string) The download url for the QR Code is generated and dispatched to the parent component if the `dispatchDownloadUrl` property is set to `true`
 
 &nbsp;
 

@@ -33,16 +33,17 @@ Many new features have been added to version 2.0.0, and some properties have bee
 
 Here is a list of the changes:
 
-| Old property name | New property name      | Note                                                                 |
-| ----------------- | ---------------------- | -------------------------------------------------------------------- |
-| `content`         | `data`                 |                                                                      |
-| `errorCorrection` | `errorCorrectionLevel` |                                                                      |
-| `base64Image`     | `logoInBase64`         |                                                                      |
-| `logoWidth`       | `logoSize`             | `logoSize` is applied to `logoWidth` and `logoHeight` (new property) |
+| Old property name      | New property name           | Note                                                                 |
+| ---------------------- | --------------------------- | -------------------------------------------------------------------- |
+| `content`              | `data`                      |                                                                      |
+| `errorCorrection`      | `errorCorrectionLevel`      |                                                                      |
+| `base64Image`          | `logoInBase64`              |                                                                      |
+| `logoWidth`            | `logoSize`                  | `logoSize` is applied to `logoWidth` and `logoHeight` (new property) |
+| `dispatchDownloadLink` | `dispatchDownloadUrl`       |                                                                      |
 
-| Old event name         | New event name        |
-| ---------------------- | --------------------- |
-| `dispatchDownloadLink` | `dispatchDownloadUrl` |
+| Old event name          | New event name         |
+| ----------------------- | ---------------------- |
+| `downloadLinkGenerated` | `downloadUrlGenerated` |
 
 ## Properties
 
@@ -251,7 +252,7 @@ If you don't set `logoBackgroundColor`, the logo will have the same background c
 
 ### Downloading the QR Code
 
-You can download the QR code as a file (`'svg'` | `'png'` | `'jpg'` | `'jpeg'` | `'webp'`) by using an anchor tag that initiates the download. To enable this functionality, set the `dispatchDownloadUrl` property to `true` and listen for the `downloadLinkGenerated` event to retrieve the download URL. You can choose the file format by setting the `downloadUrlFileFormat` property to `'svg'` (default), `'png'`, `'jpg'`, `'jpeg'`, or `'webp'`.
+You can download the QR code as a file (`'svg'` | `'png'` | `'jpg'` | `'jpeg'` | `'webp'`) by using an anchor tag that initiates the download. To enable this functionality, set the `dispatchDownloadUrl` property to `true` and listen for the `downloadUrlGenerated` event to retrieve the download URL. You can choose the file format by setting the `downloadUrlFileFormat` property to `'svg'` (default), `'png'`, `'jpg'`, `'jpeg'`, or `'webp'`.
 
 Add the `download` attribute to the anchor tag to specify the filename for the downloaded file. The extension is optional in the file name; the file format will be determined by the `downloadUrlFileFormat` property.
 
@@ -270,7 +271,7 @@ Additionally, include the `target="_blank"` attribute in the anchor tag to open 
 
   let downloadUrl = '';
 
-  const handleDownloadLinkGenerated = (url = '') => {
+  const handleDownloadUrlGenerated = (url = '') => {
     downloadUrl = url;
   };
 </script>
@@ -281,7 +282,7 @@ Additionally, include the `target="_blank"` attribute in the anchor tag to open 
     logoPath="/logo/lightning.svg"
     downloadUrlFileFormat="png"
     dispatchDownloadUrl
-    on:downloadLinkGenerated={(event) => handleDownloadLinkGenerated(event.detail.url)}
+    on:downloadUrlGenerated={(event) => handleDownloadUrlGenerated(event.detail.url)}
   />
 </div>
 
