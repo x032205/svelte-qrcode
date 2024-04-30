@@ -97,6 +97,7 @@ interface Options {
 	anchorsOuterColor: string; // Outer color of QR anchors
 	anchorsInnerColor: string; // Inner color of QR anchors
 	shape: 'square' | 'circle'; // Shape of the QR code modules and anchors
+	haveBackgroundRoundedEdges: boolean; // If set to true, the QR code will have rounded edges
 	join: boolean; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
 	container?: string; // Container element to render the QR code
 	padding: number; // Padding around the QR code
@@ -1103,6 +1104,7 @@ class QRCode {
 			anchorsOuterColor: '#000000',
 			anchorsInnerColor: '#000000',
 			shape: 'square',
+			haveBackgroundRoundedEdges: false,
 			join: false,
 			container: 'svg',
 			padding: 1,
@@ -1223,7 +1225,9 @@ class QRCode {
 
 		const JOIN = this.options.join;
 
-		const BACKGROUND_RECT = `<rect x="0" y="0" width="${WIDTH}" height="${HEIGHT}" style="fill:${this.options.backgroundColor};shape-rendering:crispEdges;"/>`;
+		const BACKGROUND_RECT = this.options.haveBackgroundRoundedEdges
+			? `<rect x="0" y="0" width="${WIDTH}" height="${HEIGHT}" rx="10" style="fill:${this.options.backgroundColor};"/>`
+			: `<rect x="0" y="0" width="${WIDTH}" height="${HEIGHT}" style="fill:${this.options.backgroundColor};shape-rendering:crispEdges;"/>`;
 
 		let modulesSvgData = '';
 

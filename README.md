@@ -127,20 +127,27 @@ You can customize the colors of the QR code using hexadecimal color codes or [CS
 
 You have two options to customize the QR code shape: `'square'` and `'circle'`.
 
-| Property name | Type                   | Default value |
-| ------------- | ---------------------- | ------------- |
-| `shape`       | `'square'`, `'circle'` | `'square'`    |
+You can also set the `haveBackgroundRoundedEdges` property to `true` to round the edges of the QR code background.
+
+| Property name                | Type                   | Default value |
+| ---------------------------- | ---------------------- | ------------- |
+| `shape`                      | `'square'`, `'circle'` | `'square'`    |
+| `haveBackgroundRoundedEdges` | `boolean`              | `false`       |
 
 ```svelte
 <!-- No need to set the shape for `square` (default value) -->
 <QRCode data="https://duxreserve.com" />
 
 <QRCode data="https://duxreserve.com" shape="circle" />
+
+<QRCode data="https://duxreserve.com" haveBackgroundRoundedEdges />
 ```
 
 ![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample-square.svg?sanitize=true)
 
 ![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample-circle.svg?sanitize=true)
+
+![Alt text](https://github.com/Castlenine/svelte-qrcode/blob/master/readme/sample-rounded-edge.svg?sanitize=true)
 
 ### Join in unique SVG element
 

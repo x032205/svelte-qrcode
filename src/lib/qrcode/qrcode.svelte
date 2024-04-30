@@ -59,6 +59,7 @@
 	export let anchorsInnerColor = anchorsOuterColor; // Inner anchors color of the QR code
 
 	export let shape: 'square' | 'circle' = 'square'; // Shape of the QR code
+	export let haveBackgroundRoundedEdges = false; // QR code background with rounded edges or not
 
 	export let isJoin = false; // If set to true, the QR code will be generated as a single SVG element. If set to false, each square will be an individual SVG element
 	export let isResponsive = false; // If set to true, the QR code will be responsive and adapt to the available space in its parent element
@@ -91,6 +92,7 @@
 		anchorsOuterColor,
 		anchorsInnerColor,
 		shape,
+		haveBackgroundRoundedEdges,
 		join: isJoin,
 		container: isResponsive ? 'svg-viewbox' : 'svg',
 		padding,
@@ -257,6 +259,7 @@
 &nbsp;
 
 @param shape (string) Shape of the QR code. Possible values: `'square'`, `'circle'`. Default is `'square'`
+@param haveBackgroundRoundedEdges (boolean) If set to `true`, the background of the QR code will have rounded edges. Default is `false`
 
 &nbsp;
 
