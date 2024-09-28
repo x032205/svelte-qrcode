@@ -204,7 +204,7 @@
 <p>Logo width & height</p>
 <div>
 	<!-- You can set a different logoWidth and LogoHeight  -->
-	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoWidth={10} logoHeight={50} />
+	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" logoWidth={20} logoHeight={30} />
 
 	<QRCode data="https://duxreserve.com" logoPath="/logo/lightning.svg" logoBackgroundColor="#009900" width={256} height={200} logoWidth={20} logoHeight={30} />
 </div>
