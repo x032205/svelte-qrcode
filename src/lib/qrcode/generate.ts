@@ -1355,7 +1355,7 @@ class QRCode {
 
 			// Get the relative logo size
 			const LOGO_REL_WIDTH = (QR_CODE_WIDTH_SIZE * (this.options.logoWidth || 0)) / 100;
-			const LOGO_REL_HEIGHT = (QR_CODE_WIDTH_SIZE * (this.options.logoWidth || 0)) / 100;
+			const LOGO_REL_HEIGHT = (QR_CODE_HEIGHT_SIZE * (this.options.logoHeight || 0)) / 100;
 
 			// Adjust logo to fit modules
 			const LOGO_CEIL_W = Math.ceil(LOGO_REL_WIDTH / MODULE_SIZE);
